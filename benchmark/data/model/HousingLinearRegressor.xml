@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_3" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.3">
+	<Header>
+		<Application name="JPMML-SkLearn" version="1.5.19"/>
+		<Timestamp>2019-12-10T12:15:27Z</Timestamp>
+	</Header>
+	<DataDictionary>
+		<DataField name="median_house_value" optype="continuous" dataType="double"/>
+		<DataField name="longitude" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="-124.35" rightMargin="-114.47"/>
+		</DataField>
+		<DataField name="latitude" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="32.54" rightMargin="41.95"/>
+		</DataField>
+		<DataField name="housing_median_age" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="1.0" rightMargin="52.0"/>
+		</DataField>
+		<DataField name="total_rooms" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="2.0" rightMargin="39320.0"/>
+		</DataField>
+		<DataField name="total_bedrooms" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="1.0" rightMargin="6445.0"/>
+		</DataField>
+		<DataField name="population" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="3.0" rightMargin="35682.0"/>
+		</DataField>
+		<DataField name="households" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="1.0" rightMargin="6082.0"/>
+		</DataField>
+		<DataField name="median_income" optype="continuous" dataType="double">
+			<Interval closure="closedClosed" leftMargin="0.4999" rightMargin="15.0001"/>
+		</DataField>
+		<DataField name="ocean_proximity" optype="categorical" dataType="string">
+			<Value value="&lt;1H OCEAN"/>
+			<Value value="INLAND"/>
+			<Value value="ISLAND"/>
+			<Value value="NEAR BAY"/>
+			<Value value="NEAR OCEAN"/>
+		</DataField>
+	</DataDictionary>
+	<TransformationDictionary/>
+	<RegressionModel functionName="regression">
+		<MiningSchema>
+			<MiningField name="median_house_value" usageType="target"/>
+			<MiningField name="ocean_proximity" missingValueTreatment="asIs"/>
+			<MiningField name="longitude" missingValueTreatment="asIs"/>
+			<MiningField name="latitude" missingValueTreatment="asIs"/>
+			<MiningField name="housing_median_age" missingValueTreatment="asIs"/>
+			<MiningField name="total_rooms" missingValueTreatment="asIs"/>
+			<MiningField name="total_bedrooms" missingValueTreatment="asIs"/>
+			<MiningField name="population" missingValueTreatment="asIs"/>
+			<MiningField name="households" missingValueTreatment="asIs"/>
+			<MiningField name="median_income" missingValueTreatment="asIs"/>
+		</MiningSchema>
+		<ModelStats>
+			<UnivariateStats field="ocean_proximity">
+				<Counts totalFreq="16346" missingFreq="0" invalidFreq="0"/>
+				<DiscrStats>
+					<Array type="string">"&lt;1H OCEAN" INLAND ISLAND "NEAR BAY" "NEAR OCEAN"</Array>
+					<Array type="int">7231 5156 3 1842 2114</Array>
+				</DiscrStats>
+			</UnivariateStats>
+			<UnivariateStats field="longitude">
+				<Counts totalFreq="16346" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="-124.35" maximum="-114.47" mean="-119.58051327541905" standardDeviation="2.005836266000149" median="-118.51" interQuartileRange="3.799999999999997"/>
+			</UnivariateStats>
+			<UnivariateStats field="latitude">
+				<Counts totalFreq="16346" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="32.54" maximum="41.95" mean="35.64056894653126" standardDeviation="2.1361153381416353" median="34.26" interQuartileRange="3.789999999999999"/>
+			</UnivariateStats>
+			<UnivariateStats field="housing_median_age">
+				<Counts totalFreq="16346" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="1.0" maximum="52.0" mean="28.615012847179738" standardDeviation="12.576787944408197" median="29.0" interQuartileRange="19.0"/>
+			</UnivariateStats>
+			<UnivariateStats field="total_rooms">
+				<Counts totalFreq="16346" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="2.0" maximum="39320.0" mean="2626.2934662914477" standardDeviation="2153.240950588431" median="2125.0" interQuartileRange="1681.75"/>
+			</UnivariateStats>
+			<UnivariateStats field="total_bedrooms">
+				<Counts totalFreq="16346" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="1.0" maximum="6445.0" mean="536.0577511317754" standardDeviation="417.4579188401889" median="434.0" interQuartileRange="350.75"/>
+			</UnivariateStats>
+			<UnivariateStats field="population">
+				<Counts totalFreq="16346" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="3.0" maximum="35682.0" mean="1420.5899914352135" standardDeviation="1129.3421690817097" median="1165.0" interQuartileRange="933.0"/>
+			</UnivariateStats>
+			<UnivariateStats field="households">
+				<Counts totalFreq="16346" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="1.0" maximum="6082.0" mean="497.6134834210204" standardDeviation="377.9858877447207" median="408.0" interQuartileRange="323.0"/>
+			</UnivariateStats>
+			<UnivariateStats field="median_income">
+				<Counts totalFreq="16346" missingFreq="0" invalidFreq="0"/>
+				<NumericInfo minimum="0.4999" maximum="15.0001" mean="3.8706968432644073" standardDeviation="1.897766647226461" median="3.53665" interQuartileRange="2.18545"/>
+			</UnivariateStats>
+		</ModelStats>
+		<LocalTransformations>
+			<DerivedField name="standard_scaler(longitude)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="longitude"/>
+						<Constant dataType="double">-119.58051327541905</Constant>
+					</Apply>
+					<Constant dataType="double">2.005836266000149</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standard_scaler(latitude)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="latitude"/>
+						<Constant dataType="double">35.64056894653126</Constant>
+					</Apply>
+					<Constant dataType="double">2.1361153381416353</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standard_scaler(housing_median_age)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="housing_median_age"/>
+						<Constant dataType="double">28.615012847179738</Constant>
+					</Apply>
+					<Constant dataType="double">12.576787944408197</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standard_scaler(total_rooms)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="total_rooms"/>
+						<Constant dataType="double">2626.2934662914477</Constant>
+					</Apply>
+					<Constant dataType="double">2153.240950588431</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standard_scaler(total_bedrooms)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="total_bedrooms"/>
+						<Constant dataType="double">536.0577511317754</Constant>
+					</Apply>
+					<Constant dataType="double">417.4579188401889</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standard_scaler(population)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="population"/>
+						<Constant dataType="double">1420.5899914352135</Constant>
+					</Apply>
+					<Constant dataType="double">1129.3421690817097</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standard_scaler(households)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="households"/>
+						<Constant dataType="double">497.6134834210204</Constant>
+					</Apply>
+					<Constant dataType="double">377.9858877447207</Constant>
+				</Apply>
+			</DerivedField>
+			<DerivedField name="standard_scaler(median_income)" optype="continuous" dataType="double">
+				<Apply function="/">
+					<Apply function="-">
+						<FieldRef field="median_income"/>
+						<Constant dataType="double">3.8706968432644073</Constant>
+					</Apply>
+					<Constant dataType="double">1.897766647226461</Constant>
+				</Apply>
+			</DerivedField>
+		</LocalTransformations>
+		<RegressionTable intercept="253544.93255766956">
+			<NumericPredictor name="standard_scaler(longitude)" coefficient="-54375.70649681826"/>
+			<NumericPredictor name="standard_scaler(latitude)" coefficient="-54808.03623499666"/>
+			<NumericPredictor name="standard_scaler(housing_median_age)" coefficient="13600.088312973096"/>
+			<NumericPredictor name="standard_scaler(total_rooms)" coefficient="-13613.10262854997"/>
+			<NumericPredictor name="standard_scaler(total_bedrooms)" coefficient="42999.85290992916"/>
+			<NumericPredictor name="standard_scaler(population)" coefficient="-41119.06758656139"/>
+			<NumericPredictor name="standard_scaler(households)" coefficient="16307.341177899516"/>
+			<NumericPredictor name="standard_scaler(median_income)" coefficient="74538.73815515594"/>
+			<CategoricalPredictor name="ocean_proximity" value="&lt;1H OCEAN" coefficient="-34269.44338726984"/>
+			<CategoricalPredictor name="ocean_proximity" value="INLAND" coefficient="-73509.66116574474"/>
+			<CategoricalPredictor name="ocean_proximity" value="ISLAND" coefficient="179383.9310755516"/>
+			<CategoricalPredictor name="ocean_proximity" value="NEAR BAY" coefficient="-40501.86026350658"/>
+			<CategoricalPredictor name="ocean_proximity" value="NEAR OCEAN" coefficient="-31102.966259030654"/>
+		</RegressionTable>
+	</RegressionModel>
+</PMML>

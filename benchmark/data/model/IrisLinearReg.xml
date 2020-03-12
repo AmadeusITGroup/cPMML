@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<PMML version="3.2" xmlns="http://www.dmg.org/PMML-3_2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dmg.org/PMML-3_2 http://www.dmg.org/v3-2/pmml-3-2.xsd">
+ <Header copyright="Copyright (c) 2012 DMG" description="Linear Regression Model">
+  <Extension name="user" value="DMG" extender="Rattle/PMML"/>
+  <Application name="Rattle/PMML" version="1.2.29"/>
+  <Timestamp>2012-09-27 12:34:14</Timestamp>
+ </Header>
+ <DataDictionary numberOfFields="5">
+  <DataField name="sepal_length" optype="continuous" dataType="double"/>
+  <DataField name="sepal_width" optype="continuous" dataType="double"/>
+  <DataField name="petal_length" optype="continuous" dataType="double"/>
+  <DataField name="petal_width" optype="continuous" dataType="double"/>
+  <DataField name="class" optype="categorical" dataType="string">
+   <Value value="Iris-setosa"/>
+   <Value value="Iris-versicolor"/>
+   <Value value="Iris-virginica"/>
+  </DataField>
+ </DataDictionary>
+ <RegressionModel modelName="Linear_Regression_Model" functionName="regression" algorithmName="least squares" targetFieldName="sepal_length">
+  <MiningSchema>
+   <MiningField name="sepal_length" usageType="predicted"/>
+   <MiningField name="sepal_width" usageType="active"/>
+   <MiningField name="petal_length" usageType="active"/>
+   <MiningField name="petal_width" usageType="active"/>
+   <MiningField name="class" usageType="active"/>
+  </MiningSchema>
+  <RegressionTable intercept="2.17126629215507">
+   <NumericPredictor name="sepal_width" exponent="1" coefficient="0.495888938388551"/>
+   <NumericPredictor name="petal_length" exponent="1" coefficient="0.829243912234806"/>
+   <NumericPredictor name="petal_width" exponent="1" coefficient="-0.315155173326474"/>
+   <CategoricalPredictor name="class" value="Iris-setosa" coefficient="0"/>
+   <CategoricalPredictor name="class" value="Iris-versicolor" coefficient="-0.723561957780729"/>
+   <CategoricalPredictor name="class" value="Iris-virginica" coefficient="-1.02349781449083"/>
+  </RegressionTable>
+ </RegressionModel>
+</PMML>

@@ -1,0 +1,1278 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Internals &mdash; cPMML  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="Glossary" href="glossary.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cPMML
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Docs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pmml_support.html">PMML Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Internals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cpmml-driving-principles">cPMML Driving Principles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#model-load-and-model-scoring">Model Load and Model Scoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#visiting-the-xml">Visiting the XML</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feature-fields">Feature Fields</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#core">Core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#expression">Expression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output">Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ensembles">Ensembles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#treemodel">TreeModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#regressionmodel">RegressionModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#math">Math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#treetable">TreeTable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils">Utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cPMML</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Internals</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/internals.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="internals">
+<h1>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h1>
+<p>It follows the documentation related to the internals of <em>cPMML</em>. Here you can find all <em>cPMML</em> classes not exposed in the public API.</p>
+<div class="section" id="cpmml-driving-principles">
+<h2>cPMML Driving Principles<a class="headerlink" href="#cpmml-driving-principles" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="model-load-and-model-scoring">
+<h3>Model Load and Model Scoring<a class="headerlink" href="#model-load-and-model-scoring" title="Permalink to this headline">¶</a></h3>
+<p><em>cPMML</em> design is split around two phases:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Model Loading</dt><dd><p>The XML content is loaded from disk to memory and the corresponding c++ object is built.</p>
+</dd>
+<dt>Model Scoring</dt><dd><p>The model object is evaluated against an user provided sample in order to produce a prediction.</p>
+</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="visiting-the-xml">
+<h3>Visiting the XML<a class="headerlink" href="#visiting-the-xml" title="Permalink to this headline">¶</a></h3>
+<p><em>cPMML</em> defines one class for each PMML XML element. Once the XML is read, it is visited recursively and,
+for each XML node encountered, the corresponding object instance is constructed.</p>
+<p>Most of the computation takes place in this phase as <strong>the idea is to precompute as much as possible
+in order to speed up scoring</strong>.</p>
+<p>In general, any object part of a cpmml::Model is meant to be immutable. With the exception of the following classes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>Sample</em></p></li>
+<li><p><em>Feature</em></p></li>
+<li><p><em>Value</em></p></li>
+</ul>
+</div></blockquote>
+<p>Indeed the previous may be used to store the user input for scoring. In this case,
+the values are changed rather than copied, to speed-up scoring.</p>
+</div>
+<div class="section" id="feature-fields">
+<h3>Feature Fields<a class="headerlink" href="#feature-fields" title="Permalink to this headline">¶</a></h3>
+<p>The PMML serialization of a model contains the definition of multiple fields which serve as input for the model.
+This fields can be defined in:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>DataDictionary</dt><dd><p>It defines the fields provided as input from the user.</p>
+</dd>
+<dt>TransformationDictionary</dt><dd><p>It defines fields derived from the ones in DataDictionary
+by applying preprocessing transformations (standardization, discretization, etc.)</p>
+</dd>
+<dt>LocalTransformations</dt><dd><p>As TransformationDictionary but with local scope.</p>
+</dd>
+<dt>Output</dt><dd><p>It defines fields derived from the output of the model scoring by applying
+postprocessing transformations (probability computation, etc.)</p>
+</dd>
+<dt>MiningSchema</dt><dd><p>It just contains the reference to which fields, among the previously defined ones,
+are actually used by the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>In <em>cPMML</em> all fields are indexed through the class <em>Indexer</em>.
+This is done to allow accessing the fields through an integer index in order to improve performance. A shared instance of Indexer is used to share the associations integer→fieldname.</p>
+</div>
+</div>
+<div class="section" id="core">
+<h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv415BuiltInFunction">
+<span id="_CPPv315BuiltInFunction"></span><span id="_CPPv215BuiltInFunction"></span><span id="BuiltInFunction"></span><span class="target" id="classBuiltInFunction"></span><em class="property">class </em><code class="sig-name descname">BuiltInFunction</code><a class="headerlink" href="#_CPPv415BuiltInFunction" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/BuiltinFunctions.html">PMML built-in functions</a>.</p>
+<p>It defines a set of predefined functions implementing low-level operations. For instance:<ul class="simple">
+<li><p>arithmetic functions: min, max, sum, etc.</p></li>
+<li><p>boolean functions: equal, isMissing, etc.</p></li>
+<li><p>etc. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv48DataType">
+<span id="_CPPv38DataType"></span><span id="_CPPv28DataType"></span><span id="DataType"></span><span class="target" id="classDataType"></span><em class="property">class </em><code class="sig-name descname">DataType</code><a class="headerlink" href="#_CPPv48DataType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/DataDictionary.html#xsdType_DATATYPE">PMML dataTypes</a>.</p>
+<p>For instance:<ul class="simple">
+<li><p>STRING</p></li>
+<li><p>INTEGER</p></li>
+<li><p>BOOLEAN</p></li>
+<li><p>etc. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv49DataField">
+<span id="_CPPv39DataField"></span><span id="_CPPv29DataField"></span><span id="DataField"></span><span class="target" id="classDataField"></span><em class="property">class </em><code class="sig-name descname">DataField</code><a class="headerlink" href="#_CPPv49DataField" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/DataDictionary.html">PMML DataField</a>.</p>
+<p>It defines a feature available to the model, along with the values it can assume. The constraints on the admissible values are enforced through the class <a class="reference internal" href="#classPredicate"><span class="std std-ref">Predicate</span></a>. </p>
+<p>Subclassed by <a class="reference internal" href="#classMiningField"><span class="std std-ref">MiningField</span></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv414DataDictionary">
+<span id="_CPPv314DataDictionary"></span><span id="_CPPv214DataDictionary"></span><span id="DataDictionary"></span><span class="target" id="classDataDictionary"></span><em class="property">class </em><code class="sig-name descname">DataDictionary</code><a class="headerlink" href="#_CPPv414DataDictionary" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/DataDictionary.html">PMML DataDictionary</a>.</p>
+<p>It is a collection of DataFields. See <a class="reference internal" href="#classDataField"><span class="std std-ref">DataField</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv47Indexer">
+<span id="_CPPv37Indexer"></span><span id="_CPPv27Indexer"></span><span id="Indexer"></span><span class="target" id="classIndexer"></span><em class="property">class </em><code class="sig-name descname">Indexer</code><a class="headerlink" href="#_CPPv47Indexer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class used to index all features available in the PMML file.</p>
+<p>In cPMML features are indexed to gain constant access time. This class keeps the associations name-index, along with the type of the feature. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv47Closure">
+<span id="_CPPv37Closure"></span><span id="_CPPv27Closure"></span><span id="Closure"></span><span class="target" id="classClosure"></span><em class="property">class </em><code class="sig-name descname">Closure</code><a class="headerlink" href="#_CPPv47Closure" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/DataDictionary.html#interval">PMML Closure</a>.</p>
+<p>It describes the type of boundaries for a range of continous values. For instance:<ul class="simple">
+<li><p>closedClosed</p></li>
+<li><p>closedOpen</p></li>
+<li><p>etc. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv410DagBuilder">
+<span id="_CPPv310DagBuilder"></span><span id="_CPPv210DagBuilder"></span><span id="DagBuilder"></span><span class="target" id="classDagBuilder"></span><em class="property">class </em><code class="sig-name descname">DagBuilder</code><a class="headerlink" href="#_CPPv410DagBuilder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Since there is no assumption on the ordering of DataFields and DerivedFields in a PMML document. This class is used to build a directed-acyclic-graph of the dependencies between fields.</p>
+<p>The DAG is represented as a vector where the ordering represents the order through which Derived fields must be computed. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv412DerivedField">
+<span id="_CPPv312DerivedField"></span><span id="_CPPv212DerivedField"></span><span id="DerivedField"></span><span class="target" id="classDerivedField"></span><em class="property">class </em><code class="sig-name descname">DerivedField</code><a class="headerlink" href="#_CPPv412DerivedField" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing a <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdElement_DerivedField">PMML DerivedField</a>.</p>
+<p>It defines a feature available to the model, which is obtained by transforming other features. The associated transformation is represented by the class <a class="reference internal" href="#classExpression"><span class="std std-ref">Expression</span></a>.</p>
+<p><dl class="simple">
+<dt><strong>See</strong></dt><dd><p><a class="reference internal" href="#classExpression"><span class="std std-ref">Expression</span></a>. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv414FieldUsageType">
+<span id="_CPPv314FieldUsageType"></span><span id="_CPPv214FieldUsageType"></span><span id="FieldUsageType"></span><span class="target" id="classFieldUsageType"></span><em class="property">class </em><code class="sig-name descname">FieldUsageType</code><a class="headerlink" href="#_CPPv414FieldUsageType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/MiningSchema.html#xsdType_FIELD-USAGE-TYPE">PMML FieldUsageType</a>.</p>
+<p>It defines the usage of a field in the mining schema. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv46Header">
+<span id="_CPPv36Header"></span><span id="_CPPv26Header"></span><span id="Header"></span><span class="target" id="classHeader"></span><em class="property">class </em><code class="sig-name descname">Header</code><a class="headerlink" href="#_CPPv46Header" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Header.html">PMML Header</a>.</p>
+<p>It contains some metadata for the model. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv417InternalEvaluator">
+<span id="_CPPv317InternalEvaluator"></span><span id="_CPPv217InternalEvaluator"></span><span id="InternalEvaluator"></span><span class="target" id="classInternalEvaluator"></span><em class="property">class </em><code class="sig-name descname">InternalEvaluator</code><a class="headerlink" href="#_CPPv417InternalEvaluator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class encapsulating the high level elements of the <a class="reference external" href="http://dmg.org/pmml/v4-4/GeneralStructure.html">PMML document</a>.:</p>
+<p>It contains:<ul class="simple">
+<li><p><a class="reference internal" href="#classHeader"><span class="std std-ref">Header</span></a></p></li>
+<li><p><a class="reference internal" href="#classDataDictionary"><span class="std std-ref">DataDictionary</span></a></p></li>
+<li><p><a class="reference internal" href="#classTransformationDictionary"><span class="std std-ref">TransformationDictionary</span></a></p></li>
+<li><p>MODEL-ELEMENT </p></li>
+</ul>
+</p>
+<p>Subclassed by <a class="reference internal" href="#classEnsembleEvaluator"><span class="std std-ref">EnsembleEvaluator</span></a>, <a class="reference internal" href="#classRegressionEvaluator"><span class="std std-ref">RegressionEvaluator</span></a>, <a class="reference internal" href="#classTreeEvaluator"><span class="std std-ref">TreeEvaluator</span></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv413InternalModel">
+<span id="_CPPv313InternalModel"></span><span id="_CPPv213InternalModel"></span><span id="InternalModel"></span><span class="target" id="classInternalModel"></span><em class="property">class </em><code class="sig-name descname">InternalModel</code><a class="headerlink" href="#_CPPv413InternalModel" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Abstract class representing a <a class="reference external" href="http://dmg.org/pmml/v4-4/GeneralStructure.html#xsdGroup_MODEL-ELEMENT">PMML MODEL-ELEMENT</a>.</p>
+<p>Implementations of this class are the central element of cPMML and they are the ones actually producing the scoring.</p>
+<p>It contains:<ul class="simple">
+<li><p><a class="reference internal" href="#classMiningSchema"><span class="std std-ref">MiningSchema</span></a></p></li>
+<li><p>LocalTransformations</p></li>
+<li><p><a class="reference internal" href="#classTarget"><span class="std std-ref">Target</span></a></p></li>
+<li><p>Output</p></li>
+</ul>
+</p>
+<p>Through the method validate, the presence of all fields needed by the model is checked. This includes DerivedFields obtained through <a class="reference internal" href="#classTransformationDictionary"><span class="std std-ref">TransformationDictionary</span></a> and also LocalTransformations. </p>
+<p>Subclassed by <a class="reference internal" href="#classEnsembleModel"><span class="std std-ref">EnsembleModel</span></a>, <a class="reference internal" href="#classRegressionModel"><span class="std std-ref">RegressionModel</span></a>, <a class="reference internal" href="#classTreeModel"><span class="std std-ref">TreeModel</span></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv413InternalScore">
+<span id="_CPPv313InternalScore"></span><span id="_CPPv213InternalScore"></span><span id="InternalScore"></span><span class="target" id="classInternalScore"></span><em class="property">class </em><code class="sig-name descname">InternalScore</code><a class="headerlink" href="#_CPPv413InternalScore" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Abstract class internally representing the prediction produced by the scoring process.</p>
+<p>It contains both double and literal representations of the score, as well as the associated probabilities and all values produced by Output. </p>
+<p>Subclassed by <a class="reference internal" href="#classRegressionScore"><span class="std std-ref">RegressionScore</span></a>, <a class="reference internal" href="#classTreeScore"><span class="std std-ref">TreeScore</span></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv415IntervalBuilder">
+<span id="_CPPv315IntervalBuilder"></span><span id="_CPPv215IntervalBuilder"></span><span id="IntervalBuilder"></span><span class="target" id="classIntervalBuilder"></span><em class="property">class </em><code class="sig-name descname">IntervalBuilder</code><a class="headerlink" href="#_CPPv415IntervalBuilder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class used to build the constraints for continous features of the <a class="reference internal" href="#classDataDictionary"><span class="std std-ref">DataDictionary</span></a>. See also <a class="reference internal" href="#classClosure"><span class="std std-ref">Closure</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv427InvalidValueTreatmentMethod">
+<span id="_CPPv327InvalidValueTreatmentMethod"></span><span id="_CPPv227InvalidValueTreatmentMethod"></span><span id="InvalidValueTreatmentMethod"></span><span class="target" id="classInvalidValueTreatmentMethod"></span><em class="property">class </em><code class="sig-name descname">InvalidValueTreatmentMethod</code><a class="headerlink" href="#_CPPv427InvalidValueTreatmentMethod" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/MiningSchema.html#xsdType_INVALID-VALUE-TREATMENT-METHOD">PMML INVALID-VALUE-TREATMENT-METHOD</a>.</p>
+<p>It defines how the model should behave when encountering a feature assuming a value not respecting the constraints defined in the <a class="reference internal" href="#classDataDictionary"><span class="std std-ref">DataDictionary</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv411MiningField">
+<span id="_CPPv311MiningField"></span><span id="_CPPv211MiningField"></span><span id="MiningField"></span><span class="target" id="classMiningField"></span><em class="property">class </em><code class="sig-name descname">MiningField</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv49DataField" title="DataField">DataField</a><a class="headerlink" href="#_CPPv411MiningField" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/MiningSchema.html">PMML MiningField</a>.</p>
+<p>It defines a field used by the model, along with its usage type and the behaviour in case of missing/invalid values. See also: <a class="reference internal" href="#classDataDictionary"><span class="std std-ref">DataDictionary</span></a>, <a class="reference internal" href="#classInvalidValueTreatmentMethod"><span class="std std-ref">InvalidValueTreatmentMethod</span></a>, <a class="reference internal" href="#classMissingValueTreatmentMethod"><span class="std std-ref">MissingValueTreatmentMethod</span></a>, OutlierTreatmentMethos, <a class="reference internal" href="#classFieldUsageType"><span class="std std-ref">FieldUsageType</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv414MiningFunction">
+<span id="_CPPv314MiningFunction"></span><span id="_CPPv214MiningFunction"></span><span id="MiningFunction"></span><span class="target" id="classMiningFunction"></span><em class="property">class </em><code class="sig-name descname">MiningFunction</code><a class="headerlink" href="#_CPPv414MiningFunction" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/GeneralStructure.html#xsdType_MINING-FUNCTION">PMML MiningFunction</a>.</p>
+<p>It defines which is the function pursued by the model.</p>
+<p>For instance:<ul class="simple">
+<li><p>Classification</p></li>
+<li><p>Regression</p></li>
+<li><p>Clustering</p></li>
+<li><p>etc. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv412MiningSchema">
+<span id="_CPPv312MiningSchema"></span><span id="_CPPv212MiningSchema"></span><span id="MiningSchema"></span><span class="target" id="classMiningSchema"></span><em class="property">class </em><code class="sig-name descname">MiningSchema</code><a class="headerlink" href="#_CPPv412MiningSchema" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class Representing <a class="reference external" href="http://dmg.org/pmml/v4-4/MiningSchema.html">PMML MiningSchema</a>.</p>
+<p>It is a collection of MiningFields. See <a class="reference internal" href="#classMiningField"><span class="std std-ref">MiningField</span></a>.</p>
+<p>Notice that the link with the values defined in <a class="reference internal" href="#classDataDictionary"><span class="std std-ref">DataDictionary</span></a> is performed by deriving MiningFields from DataFields.</p>
+<p>Through the method validate, the presence of all fields needed by the model is checked. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv427MissingValueTreatmentMethod">
+<span id="_CPPv327MissingValueTreatmentMethod"></span><span id="_CPPv227MissingValueTreatmentMethod"></span><span id="MissingValueTreatmentMethod"></span><span class="target" id="classMissingValueTreatmentMethod"></span><em class="property">class </em><code class="sig-name descname">MissingValueTreatmentMethod</code><a class="headerlink" href="#_CPPv427MissingValueTreatmentMethod" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/MiningSchema.html#xsdType_MISSING-VALUE-TREATMENT-METHOD">PMML MISSING-VALUE-TREATMENT-METHOD</a>.</p>
+<p>It defines how the model should behave when encountering a feature whose value is missing. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv412ModelBuilder">
+<span id="_CPPv312ModelBuilder"></span><span id="_CPPv212ModelBuilder"></span><span id="ModelBuilder"></span><span class="target" id="classModelBuilder"></span><em class="property">class </em><code class="sig-name descname">ModelBuilder</code><a class="headerlink" href="#_CPPv412ModelBuilder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Factory class to create <a class="reference internal" href="#classInternalEvaluator"><span class="std std-ref">InternalEvaluator</span></a> objects. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv46OpType">
+<span id="_CPPv36OpType"></span><span id="_CPPv26OpType"></span><span id="OpType"></span><span class="target" id="classOpType"></span><em class="property">class </em><code class="sig-name descname">OpType</code><a class="headerlink" href="#_CPPv46OpType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/DataDictionary.html#xsdType_OPTYPE">PMML opType</a>.</p>
+<p>For instance:<ul class="simple">
+<li><p>CATEGORICAL</p></li>
+<li><p>ORDINAL</p></li>
+<li><p>CONTINUOUS </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv422OutlierTreatmentMethod">
+<span id="_CPPv322OutlierTreatmentMethod"></span><span id="_CPPv222OutlierTreatmentMethod"></span><span id="OutlierTreatmentMethod"></span><span class="target" id="classOutlierTreatmentMethod"></span><em class="property">class </em><code class="sig-name descname">OutlierTreatmentMethod</code><a class="headerlink" href="#_CPPv422OutlierTreatmentMethod" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/MiningSchema.html#xsdType_OUTLIER-TREATMENT-METHOD">PMML OUTLIER-TREATMENT-METHOD</a>.</p>
+<p>It defines how the model should behave when encountering a feature assuming a value considered as an outlier. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv49Predicate">
+<span id="_CPPv39Predicate"></span><span id="_CPPv29Predicate"></span><span id="Predicate"></span><span class="target" id="classPredicate"></span><em class="property">class </em><code class="sig-name descname">Predicate</code><a class="headerlink" href="#_CPPv49Predicate" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/TreeModel.html#xsdGroup_PREDICATE">PMML Predicate</a>.</p>
+<p>It is used to enforce a constraint between values, between set of values or between recursively defined set of other constraints. See also <a class="reference internal" href="#classPredicateOpType"><span class="std std-ref">PredicateOpType</span></a>, <a class="reference internal" href="#classTreeModel"><span class="std std-ref">TreeModel</span></a>, <a class="reference internal" href="#classDataDictionary"><span class="std std-ref">DataDictionary</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv415PredicateOpType">
+<span id="_CPPv315PredicateOpType"></span><span id="_CPPv215PredicateOpType"></span><span id="PredicateOpType"></span><span class="target" id="classPredicateOpType"></span><em class="property">class </em><code class="sig-name descname">PredicateOpType</code><a class="headerlink" href="#_CPPv415PredicateOpType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing the operator for the condition enforced by a predicate.</p>
+<p>For instance:<ul class="simple">
+<li><p>equal</p></li>
+<li><p>notEqual</p></li>
+<li><p>isIn</p></li>
+<li><p>surrogate</p></li>
+<li><p>etc. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv413PredicateType">
+<span id="_CPPv313PredicateType"></span><span id="_CPPv213PredicateType"></span><span id="PredicateType"></span><span class="target" id="classPredicateType"></span><em class="property">class </em><code class="sig-name descname">PredicateType</code><a class="headerlink" href="#_CPPv413PredicateType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing the type of predicate.</p>
+<p>For instance:<ul class="simple">
+<li><p>SimplePredicate</p></li>
+<li><p>SimpleSetPredicate</p></li>
+<li><p>CompoundPredicate</p></li>
+<li><p>True</p></li>
+<li><p>False</p></li>
+</ul>
+</p>
+<p>See also <a class="reference external" href="http://dmg.org/pmml/v4-4/TreeModel.html#xsdGroup_PREDICATE">PMML Predicate</a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv416PredicateBuilder">
+<span id="_CPPv316PredicateBuilder"></span><span id="_CPPv216PredicateBuilder"></span><span id="PredicateBuilder"></span><span class="target" id="classPredicateBuilder"></span><em class="property">class </em><code class="sig-name descname">PredicateBuilder</code><a class="headerlink" href="#_CPPv416PredicateBuilder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Factory class to create <a class="reference internal" href="#classPredicate"><span class="std std-ref">Predicate</span></a> objects. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv48Property">
+<span id="_CPPv38Property"></span><span id="_CPPv28Property"></span><span id="Property"></span><span class="target" id="classProperty"></span><em class="property">class </em><code class="sig-name descname">Property</code><a class="headerlink" href="#_CPPv48Property" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/DataDictionary.html">PMML Property</a>.</p>
+<p>It used to define the constraints for admissible values in the <a class="reference internal" href="#classDataDictionary"><span class="std std-ref">DataDictionary</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv46Sample">
+<span id="_CPPv36Sample"></span><span id="_CPPv26Sample"></span><span id="Sample"></span><span class="target" id="classSample"></span><em class="property">class </em><code class="sig-name descname">Sample</code><a class="headerlink" href="#_CPPv46Sample" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class used as an internal representation of the user provided sample.</p>
+<p>It stores the values for each feature used by the model. The features are indexed thanks to <a class="reference internal" href="#classIndexer"><span class="std std-ref">Indexer</span></a> class. This allows to reach constant access time. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv47Feature">
+<span id="_CPPv37Feature"></span><span id="_CPPv27Feature"></span><span id="Feature"></span><span class="target" id="classFeature"></span><em class="property">class </em><code class="sig-name descname">Feature</code><a class="headerlink" href="#_CPPv47Feature" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class used as an internal representation of the user provided feature.</p>
+<p>It allows to signal when the corresponding value is missing. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv46Target">
+<span id="_CPPv36Target"></span><span id="_CPPv26Target"></span><span id="Target"></span><span class="target" id="classTarget"></span><em class="property">class </em><code class="sig-name descname">Target</code><a class="headerlink" href="#_CPPv46Target" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Targets.html">PMML Target</a>.</p>
+<p>It defines transformations for the raw output of a model. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv424TransformationDictionary">
+<span id="_CPPv324TransformationDictionary"></span><span id="_CPPv224TransformationDictionary"></span><span id="TransformationDictionary"></span><span class="target" id="classTransformationDictionary"></span><em class="property">class </em><code class="sig-name descname">TransformationDictionary</code><a class="headerlink" href="#_CPPv424TransformationDictionary" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html">PMML TransformationDictionary</a>.</p>
+<p>It is a collection of DerivedFields. See also <a class="reference internal" href="#classDerivedField"><span class="std std-ref">DerivedField</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv411string_view">
+<span id="_CPPv311string_view"></span><span id="_CPPv211string_view"></span><span id="string_view"></span><span class="target" id="classstring__view"></span><em class="property">class </em><code class="sig-name descname">string_view</code><a class="headerlink" href="#_CPPv411string_view" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An implementation of a non-owning reference to std::string. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv47XmlNode">
+<span id="_CPPv37XmlNode"></span><span id="_CPPv27XmlNode"></span><span id="XmlNode"></span><span class="target" id="classXmlNode"></span><em class="property">class </em><code class="sig-name descname">XmlNode</code><a class="headerlink" href="#_CPPv47XmlNode" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Non-owning wrapper of rapidxml::xml_node&lt;&gt; *, implementing some utility functions. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv45Value">
+<span id="_CPPv35Value"></span><span id="_CPPv25Value"></span><span id="Value"></span><span class="target" id="classValue"></span><em class="property">class </em><code class="sig-name descname">Value</code><a class="headerlink" href="#_CPPv45Value" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Internal representation of each value used by the model. For efficiency reasons every type of input value is converted into double. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="expression">
+<h2>Expression<a class="headerlink" href="#expression" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv410Expression">
+<span id="_CPPv310Expression"></span><span id="_CPPv210Expression"></span><span id="Expression"></span><span class="target" id="classExpression"></span><em class="property">class </em><code class="sig-name descname">Expression</code><a class="headerlink" href="#_CPPv410Expression" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Abstract class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdGroup_EXPRESSION">PMML Expression</a>.</p>
+<p>Its implementations provide the transformations used by <a class="reference internal" href="#classDerivedField"><span class="std std-ref">DerivedField</span></a>. </p>
+<p>Subclassed by <a class="reference internal" href="#classApply"><span class="std std-ref">Apply</span></a>, <a class="reference internal" href="#classConstant"><span class="std std-ref">Constant</span></a>, <a class="reference internal" href="#classDiscretize"><span class="std std-ref">Discretize</span></a>, <a class="reference internal" href="#classFieldRef"><span class="std std-ref">FieldRef</span></a>, <a class="reference internal" href="#classMapValues"><span class="std std-ref">MapValues</span></a>, <a class="reference internal" href="#classNormContinuous"><span class="std std-ref">NormContinuous</span></a>, <a class="reference internal" href="#classNormDiscrete"><span class="std std-ref">NormDiscrete</span></a>, <a class="reference internal" href="#classOutputExpression"><span class="std std-ref">OutputExpression</span></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv45Apply">
+<span id="_CPPv35Apply"></span><span id="_CPPv25Apply"></span><span id="Apply"></span><span class="target" id="classApply"></span><em class="property">class </em><code class="sig-name descname">Apply</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv410Expression" title="Expression">Expression</a><a class="headerlink" href="#_CPPv45Apply" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Functions.html#xsdElement_Apply">PMML Apply</a>.</p>
+<p>It allows to perform user-defined transformations made of other PMML Expressions or PMML Built-in functions. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv48Constant">
+<span id="_CPPv38Constant"></span><span id="_CPPv28Constant"></span><span id="Constant"></span><span class="target" id="classConstant"></span><em class="property">class </em><code class="sig-name descname">Constant</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv410Expression" title="Expression">Expression</a><a class="headerlink" href="#_CPPv48Constant" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdElement_Constant">PMML Constant</a>.</p>
+<p>It provides a constant value for other PMML Expressions. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv410Discretize">
+<span id="_CPPv310Discretize"></span><span id="_CPPv210Discretize"></span><span id="Discretize"></span><span class="target" id="classDiscretize"></span><em class="property">class </em><code class="sig-name descname">Discretize</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv410Expression" title="Expression">Expression</a><a class="headerlink" href="#_CPPv410Discretize" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdElement_Discretize">PMML Discretize</a>.</p>
+<p>It performs the discretization of numerical input fields by mapping from continuous to discrete values using intervals. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv48FieldRef">
+<span id="_CPPv38FieldRef"></span><span id="_CPPv28FieldRef"></span><span id="FieldRef"></span><span class="target" id="classFieldRef"></span><em class="property">class </em><code class="sig-name descname">FieldRef</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv410Expression" title="Expression">Expression</a><a class="headerlink" href="#_CPPv48FieldRef" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdElement_FieldRef">PMML FieldRef</a>.</p>
+<p>It is used to simply reference (and rename) another <a class="reference internal" href="#classDataField"><span class="std std-ref">DataField</span></a> or <a class="reference internal" href="#classDerivedField"><span class="std std-ref">DerivedField</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv414SimpleFieldRef">
+<span id="_CPPv314SimpleFieldRef"></span><span id="_CPPv214SimpleFieldRef"></span><span id="SimpleFieldRef"></span><span class="target" id="classSimpleFieldRef"></span><em class="property">class </em><code class="sig-name descname">SimpleFieldRef</code><a class="headerlink" href="#_CPPv414SimpleFieldRef" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class used to simply reference (and rename) another <a class="reference internal" href="#classDataField"><span class="std std-ref">DataField</span></a> or <a class="reference internal" href="#classDerivedField"><span class="std std-ref">DerivedField</span></a>. It differs from <a class="reference internal" href="#classFieldRef"><span class="std std-ref">FieldRef</span></a> since it has local scope rather than global scope. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv49MapValues">
+<span id="_CPPv39MapValues"></span><span id="_CPPv29MapValues"></span><span id="MapValues"></span><span class="target" id="classMapValues"></span><em class="property">class </em><code class="sig-name descname">MapValues</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv410Expression" title="Expression">Expression</a><a class="headerlink" href="#_CPPv49MapValues" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdElement_MapValues">PMML MapValues</a>.</p>
+<p>Through the use of a table (implemented with <a class="reference internal" href="#classTreeTable"><span class="std std-ref">TreeTable</span></a>) it maps discrete values to other discrete values. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv414NormContinuous">
+<span id="_CPPv314NormContinuous"></span><span id="_CPPv214NormContinuous"></span><span id="NormContinuous"></span><span class="target" id="classNormContinuous"></span><em class="property">class </em><code class="sig-name descname">NormContinuous</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv410Expression" title="Expression">Expression</a><a class="headerlink" href="#_CPPv414NormContinuous" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdElement_NormContinuous">PMML NormContinuous</a>.</p>
+<p>It is used to normalize input fields through a piecewise linear interpolation. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv412NormDiscrete">
+<span id="_CPPv312NormDiscrete"></span><span id="_CPPv212NormDiscrete"></span><span id="NormDiscrete"></span><span class="target" id="classNormDiscrete"></span><em class="property">class </em><code class="sig-name descname">NormDiscrete</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv410Expression" title="Expression">Expression</a><a class="headerlink" href="#_CPPv412NormDiscrete" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdElement_NormDiscrete">PMML NormDiscrete</a>.</p>
+<p>It performs the encoding of STRING values into numerical values. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv414ExpressionType">
+<span id="_CPPv314ExpressionType"></span><span id="_CPPv214ExpressionType"></span><span id="ExpressionType"></span><span class="target" id="classExpressionType"></span><em class="property">class </em><code class="sig-name descname">ExpressionType</code><a class="headerlink" href="#_CPPv414ExpressionType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class used to represents the different PMML-EXPRESSION types.</p>
+<p>For instance:<ul class="simple">
+<li><p><a class="reference internal" href="#classConstant"><span class="std std-ref">Constant</span></a></p></li>
+<li><p><a class="reference internal" href="#classNormDiscrete"><span class="std std-ref">NormDiscrete</span></a></p></li>
+<li><p><a class="reference internal" href="#classMapValues"><span class="std std-ref">MapValues</span></a></p></li>
+<li><p>etc. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv417ExpressionBuilder">
+<span id="_CPPv317ExpressionBuilder"></span><span id="_CPPv217ExpressionBuilder"></span><span id="ExpressionBuilder"></span><span class="target" id="classExpressionBuilder"></span><em class="property">class </em><code class="sig-name descname">ExpressionBuilder</code><a class="headerlink" href="#_CPPv417ExpressionBuilder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Factory class to create <a class="reference internal" href="#classExpression"><span class="std std-ref">Expression</span></a> objects. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="output">
+<h2>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv416OutputDictionary">
+<span id="_CPPv316OutputDictionary"></span><span id="_CPPv216OutputDictionary"></span><span id="OutputDictionary"></span><span class="target" id="classOutputDictionary"></span><em class="property">class </em><code class="sig-name descname">OutputDictionary</code><a class="headerlink" href="#_CPPv416OutputDictionary" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Output.html">PMML Output</a>.</p>
+<p>It is a collection of OutputFields. See <a class="reference internal" href="#classOutputField"><span class="std std-ref">OutputField</span></a>.</p>
+<p>Also in this case a DAG is built to keep track of dependencies between OutputFields. However this DAG is unrelated to the one built by <a class="reference internal" href="#classDagBuilder"><span class="std std-ref">DagBuilder</span></a> since DerivedFields and OuputFields have different scope: the former deals with preprocessing of fields while the second deals with postprocessing of fields. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv411OutputField">
+<span id="_CPPv311OutputField"></span><span id="_CPPv211OutputField"></span><span id="OutputField"></span><span class="target" id="classOutputField"></span><em class="property">class </em><code class="sig-name descname">OutputField</code><a class="headerlink" href="#_CPPv411OutputField" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Output.html#xsdElement_OutputField">PMML OutputField</a>.</p>
+<p>It defines a which output features the model will produce from the raw prediction. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv416OutputExpression">
+<span id="_CPPv316OutputExpression"></span><span id="_CPPv216OutputExpression"></span><span id="OutputExpression"></span><span class="target" id="classOutputExpression"></span><em class="property">class </em><code class="sig-name descname">OutputExpression</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv410Expression" title="Expression">Expression</a><a class="headerlink" href="#_CPPv416OutputExpression" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Abstract class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Output.html#xsdType_RESULT-FEATURE">PMML RESULT-FEATURE</a>.</p>
+<p>Its implementations provide the transformations used by <a class="reference internal" href="#classOutputField"><span class="std std-ref">OutputField</span></a>. </p>
+<p>Subclassed by <a class="reference internal" href="#classPredictedValue"><span class="std std-ref">PredictedValue</span></a>, <a class="reference internal" href="#classProbability"><span class="std std-ref">Probability</span></a>, <a class="reference internal" href="#classTransformedValue"><span class="std std-ref">TransformedValue</span></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv420OutputExpressionType">
+<span id="_CPPv320OutputExpressionType"></span><span id="_CPPv220OutputExpressionType"></span><span id="OutputExpressionType"></span><span class="target" id="classOutputExpressionType"></span><em class="property">class </em><code class="sig-name descname">OutputExpressionType</code><a class="headerlink" href="#_CPPv420OutputExpressionType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class used to represents the different PMML RESULT-FEATURE types.</p>
+<p>For instance:<ul class="simple">
+<li><p>predictedValue</p></li>
+<li><p>transformedValue</p></li>
+<li><p>probability</p></li>
+<li><p>etc. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv423OutputExpressionBuilder">
+<span id="_CPPv323OutputExpressionBuilder"></span><span id="_CPPv223OutputExpressionBuilder"></span><span id="OutputExpressionBuilder"></span><span class="target" id="classOutputExpressionBuilder"></span><em class="property">class </em><code class="sig-name descname">OutputExpressionBuilder</code><a class="headerlink" href="#_CPPv423OutputExpressionBuilder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Factory class to create <a class="reference internal" href="#classOutputExpression"><span class="std std-ref">OutputExpression</span></a> objects. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv414PredictedValue">
+<span id="_CPPv314PredictedValue"></span><span id="_CPPv214PredictedValue"></span><span id="PredictedValue"></span><span class="target" id="classPredictedValue"></span><em class="property">class </em><code class="sig-name descname">PredictedValue</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv416OutputExpression" title="OutputExpression">OutputExpression</a><a class="headerlink" href="#_CPPv414PredictedValue" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Output.html#xsdType_RESULT-FEATURE">PMML PredictedValue</a>.</p>
+<p>It is used to simply reference (and rename) the raw predicion value provided by the model. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv416TransformedValue">
+<span id="_CPPv316TransformedValue"></span><span id="_CPPv216TransformedValue"></span><span id="TransformedValue"></span><span class="target" id="classTransformedValue"></span><em class="property">class </em><code class="sig-name descname">TransformedValue</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv416OutputExpression" title="OutputExpression">OutputExpression</a><a class="headerlink" href="#_CPPv416TransformedValue" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdElement_FieldRef">PMML TransformedValue</a>.</p>
+<p>It allows to perform user-defined transformations made of other PMML Expressions or PMML Built-in functions. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv411Probability">
+<span id="_CPPv311Probability"></span><span id="_CPPv211Probability"></span><span id="Probability"></span><span class="target" id="classProbability"></span><em class="property">class </em><code class="sig-name descname">Probability</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv416OutputExpression" title="OutputExpression">OutputExpression</a><a class="headerlink" href="#_CPPv411Probability" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html#xsdElement_FieldRef">PMML Probability</a>.</p>
+<p>It is used to simply reference (and rename) the probabilities associated with the raw prediction value provided by the model. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="ensembles">
+<h2>Ensembles<a class="headerlink" href="#ensembles" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv417EnsembleEvaluator">
+<span id="_CPPv317EnsembleEvaluator"></span><span id="_CPPv217EnsembleEvaluator"></span><span id="EnsembleEvaluator"></span><span class="target" id="classEnsembleEvaluator"></span><em class="property">class </em><code class="sig-name descname">EnsembleEvaluator</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv417InternalEvaluator" title="InternalEvaluator">InternalEvaluator</a><a class="headerlink" href="#_CPPv417EnsembleEvaluator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Implementation of <a class="reference internal" href="#classInternalEvaluator"><span class="std std-ref">InternalEvaluator</span></a>, it is used as a wrapper of <a class="reference internal" href="#classEnsembleModel"><span class="std std-ref">EnsembleModel</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv413EnsembleModel">
+<span id="_CPPv313EnsembleModel"></span><span id="_CPPv213EnsembleModel"></span><span id="EnsembleModel"></span><span class="target" id="classEnsembleModel"></span><em class="property">class </em><code class="sig-name descname">EnsembleModel</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv413InternalModel" title="InternalModel">InternalModel</a><a class="headerlink" href="#_CPPv413EnsembleModel" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Implementation of <a class="reference internal" href="#classInternalModel"><span class="std std-ref">InternalModel</span></a> representing a <a class="reference external" href="http://dmg.org/pmml/v4-4/MultipleModels.html">PMML MiningModel</a>.</p>
+<p>Through this class are represented all ensemble models. For instance, the Random Forest Model or the Gradient Boosted Trees model. See also <a class="reference internal" href="#classMultipleModelMethod"><span class="std std-ref">MultipleModelMethod</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv419MultipleModelMethod">
+<span id="_CPPv319MultipleModelMethod"></span><span id="_CPPv219MultipleModelMethod"></span><span id="MultipleModelMethod"></span><span class="target" id="classMultipleModelMethod"></span><em class="property">class </em><code class="sig-name descname">MultipleModelMethod</code><a class="headerlink" href="#_CPPv419MultipleModelMethod" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class reresenting <a class="reference external" href="http://dmg.org/pmml/v4-4/MultipleModels.html#xsdType_MULTIPLE-MODEL-METHOD">PMML MULTIPLE-MODEL-METHOD</a>.</p>
+<p>For instance:<ul class="simple">
+<li><p>majorityVote</p></li>
+<li><p>weightedAverage</p></li>
+<li><p>modelChain </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv47Segment">
+<span id="_CPPv37Segment"></span><span id="_CPPv27Segment"></span><span id="Segment"></span><span class="target" id="classSegment"></span><em class="property">class </em><code class="sig-name descname">Segment</code><a class="headerlink" href="#_CPPv47Segment" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/MultipleModels.html#xsdElement_Segmentation">PMML Segment</a>.</p>
+<p>Inside of an ensemble of models, this is the wrapper for the single model object. See also <a class="reference internal" href="#classEnsembleModel"><span class="std std-ref">EnsembleModel</span></a>. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="treemodel">
+<h2>TreeModel<a class="headerlink" href="#treemodel" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv413TreeEvaluator">
+<span id="_CPPv313TreeEvaluator"></span><span id="_CPPv213TreeEvaluator"></span><span id="TreeEvaluator"></span><span class="target" id="classTreeEvaluator"></span><em class="property">class </em><code class="sig-name descname">TreeEvaluator</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv417InternalEvaluator" title="InternalEvaluator">InternalEvaluator</a><a class="headerlink" href="#_CPPv413TreeEvaluator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Implementation of <a class="reference internal" href="#classInternalEvaluator"><span class="std std-ref">InternalEvaluator</span></a>, it is used as a wrapper of <a class="reference internal" href="#classTreeModel"><span class="std std-ref">TreeModel</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv49TreeModel">
+<span id="_CPPv39TreeModel"></span><span id="_CPPv29TreeModel"></span><span id="TreeModel"></span><span class="target" id="classTreeModel"></span><em class="property">class </em><code class="sig-name descname">TreeModel</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv413InternalModel" title="InternalModel">InternalModel</a><a class="headerlink" href="#_CPPv49TreeModel" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Implementation of <a class="reference internal" href="#classInternalModel"><span class="std std-ref">InternalModel</span></a> representing a <a class="reference external" href="http://dmg.org/pmml/v4-4/TreeModel.html">PMML TreeModel</a>.</p>
+<p>Through this class are represented Decision Tree models, both for classification and regression. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv49TreeScore">
+<span id="_CPPv39TreeScore"></span><span id="_CPPv29TreeScore"></span><span id="TreeScore"></span><span class="target" id="classTreeScore"></span><em class="property">class </em><code class="sig-name descname">TreeScore</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv413InternalScore" title="InternalScore">InternalScore</a><a class="headerlink" href="#_CPPv49TreeScore" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Implementation of <a class="reference internal" href="#classInternalScore"><span class="std std-ref">InternalScore</span></a> for <a class="reference internal" href="#classTreeModel"><span class="std std-ref">TreeModel</span></a> objects. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv44Node">
+<span id="_CPPv34Node"></span><span id="_CPPv24Node"></span><span id="Node"></span><span class="target" id="classNode"></span><em class="property">class </em><code class="sig-name descname">Node</code><a class="headerlink" href="#_CPPv44Node" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/TreeModel.html#xsdElement_Node">PMML Node</a>.</p>
+<p>It is a node of the decision tree, containing a <a class="reference internal" href="#classPredicate"><span class="std std-ref">Predicate</span></a> and a <a class="reference internal" href="#classTreeScore"><span class="std std-ref">TreeScore</span></a>. The score represents the prediction associated to a sample matching the predicate. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv417ScoreDistribution">
+<span id="_CPPv317ScoreDistribution"></span><span id="_CPPv217ScoreDistribution"></span><span id="ScoreDistribution"></span><span class="target" id="classScoreDistribution"></span><em class="property">class </em><code class="sig-name descname">ScoreDistribution</code><a class="headerlink" href="#_CPPv417ScoreDistribution" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/TreeModel.html#xsdElement_ScoreDistribution">PMML ScoreDistribution</a>.</p>
+<p>It contains additional information for the score associated to a node. For instance:<ul class="simple">
+<li><p><a class="reference internal" href="#classProbability"><span class="std std-ref">Probability</span></a> distribution.</p></li>
+<li><p>Confidence. </p></li>
+</ul>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="regressionmodel">
+<h2>RegressionModel<a class="headerlink" href="#regressionmodel" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv419RegressionEvaluator">
+<span id="_CPPv319RegressionEvaluator"></span><span id="_CPPv219RegressionEvaluator"></span><span id="RegressionEvaluator"></span><span class="target" id="classRegressionEvaluator"></span><em class="property">class </em><code class="sig-name descname">RegressionEvaluator</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv417InternalEvaluator" title="InternalEvaluator">InternalEvaluator</a><a class="headerlink" href="#_CPPv419RegressionEvaluator" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Implementation of <a class="reference internal" href="#classInternalEvaluator"><span class="std std-ref">InternalEvaluator</span></a>, it is used as a wrapper of <a class="reference internal" href="#classRegressionModel"><span class="std std-ref">RegressionModel</span></a>. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv415RegressionModel">
+<span id="_CPPv315RegressionModel"></span><span id="_CPPv215RegressionModel"></span><span id="RegressionModel"></span><span class="target" id="classRegressionModel"></span><em class="property">class </em><code class="sig-name descname">RegressionModel</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv413InternalModel" title="InternalModel">InternalModel</a><a class="headerlink" href="#_CPPv415RegressionModel" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Implementation of <a class="reference internal" href="#classInternalModel"><span class="std std-ref">InternalModel</span></a> representing a <a class="reference external" href="http://dmg.org/pmml/v4-4/Regression.html">PMML RegressionModel</a>.</p>
+<p>Through this class are represented models such as Linear Regression Model, Logistic Regression Model, etc. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv415RegressionTable">
+<span id="_CPPv315RegressionTable"></span><span id="_CPPv215RegressionTable"></span><span id="RegressionTable"></span><span class="target" id="classRegressionTable"></span><em class="property">class </em><code class="sig-name descname">RegressionTable</code><a class="headerlink" href="#_CPPv415RegressionTable" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Regression.html#xsdElement_RegressionTable">PMML Regression Table</a>.</p>
+<p>It is the class wrapping all predictors for the <a class="reference internal" href="#classRegressionModel"><span class="std std-ref">RegressionModel</span></a>: <a class="reference internal" href="#classNumericPredictor"><span class="std std-ref">NumericPredictor</span></a>, <a class="reference internal" href="#classCategoricalPredictor"><span class="std std-ref">CategoricalPredictor</span></a> and <a class="reference internal" href="#classPredictorTerm"><span class="std std-ref">PredictorTerm</span></a>. For predicting a numerical value <a class="reference internal" href="#classRegressionModel"><span class="std std-ref">RegressionModel</span></a> contains just one <a class="reference internal" href="#classRegressionTable"><span class="std std-ref">RegressionTable</span></a>. For predicting a categorical value, it contains one <a class="reference internal" href="#classRegressionTable"><span class="std std-ref">RegressionTable</span></a> for each category involved. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv416NumericPredictor">
+<span id="_CPPv316NumericPredictor"></span><span id="_CPPv216NumericPredictor"></span><span id="NumericPredictor"></span><span class="target" id="classNumericPredictor"></span><em class="property">class </em><code class="sig-name descname">NumericPredictor</code><a class="headerlink" href="#_CPPv416NumericPredictor" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Regression.html#xsdElement_NumericPredictor">PMML NumericPredictor</a>.</p>
+<p>It contains the parameters (coefficients and exponents) needed to compute the regressed value of a continuous variable. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv420CategoricalPredictor">
+<span id="_CPPv320CategoricalPredictor"></span><span id="_CPPv220CategoricalPredictor"></span><span id="CategoricalPredictor"></span><span class="target" id="classCategoricalPredictor"></span><em class="property">class </em><code class="sig-name descname">CategoricalPredictor</code><a class="headerlink" href="#_CPPv420CategoricalPredictor" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Regression.html#xsdElement_CategoricalPredictor">PMML CategoricalPredictor</a>.</p>
+<p>It contains the parameters (coefficients and exponents) needed to compute the regression score for a single category among the ones involved in the prediction of a categorical variable. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv413PredictorTerm">
+<span id="_CPPv313PredictorTerm"></span><span id="_CPPv213PredictorTerm"></span><span id="PredictorTerm"></span><span class="target" id="classPredictorTerm"></span><em class="property">class </em><code class="sig-name descname">PredictorTerm</code><a class="headerlink" href="#_CPPv413PredictorTerm" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Regression.html#xsdElement_PredictorTerm">PMML PredictorTerm</a>.</p>
+<p>It contains references to other fields in the PMML, which are combined by multiplication. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv432SingleNormalizationMethodBuilder">
+<span id="_CPPv332SingleNormalizationMethodBuilder"></span><span id="_CPPv232SingleNormalizationMethodBuilder"></span><span id="SingleNormalizationMethodBuilder"></span><span class="target" id="classSingleNormalizationMethodBuilder"></span><em class="property">class </em><code class="sig-name descname">SingleNormalizationMethodBuilder</code><a class="headerlink" href="#_CPPv432SingleNormalizationMethodBuilder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Factory class building the normalization method for a <a class="reference internal" href="#classRegressionModel"><span class="std std-ref">RegressionModel</span></a> predicting a continuous variable. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv431MultiNormalizationMethodBuilder">
+<span id="_CPPv331MultiNormalizationMethodBuilder"></span><span id="_CPPv231MultiNormalizationMethodBuilder"></span><span id="MultiNormalizationMethodBuilder"></span><span class="target" id="classMultiNormalizationMethodBuilder"></span><em class="property">class </em><code class="sig-name descname">MultiNormalizationMethodBuilder</code><a class="headerlink" href="#_CPPv431MultiNormalizationMethodBuilder" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Factory class building the normalization method for a <a class="reference internal" href="#classRegressionModel"><span class="std std-ref">RegressionModel</span></a> predicting a categorical variable. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv423NormalizationMethodType">
+<span id="_CPPv323NormalizationMethodType"></span><span id="_CPPv223NormalizationMethodType"></span><span id="NormalizationMethodType"></span><span class="target" id="classNormalizationMethodType"></span><em class="property">class </em><code class="sig-name descname">NormalizationMethodType</code><a class="headerlink" href="#_CPPv423NormalizationMethodType" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing <a class="reference external" href="http://dmg.org/pmml/v4-4/Regression.html#xsdType_REGRESSIONNORMALIZATIONMETHOD">PMML REGRESSIONNORMALIZATIONMETHOD</a>.</p>
+<p>For instance:<ul class="simple">
+<li><p>SIMPLEMAX</p></li>
+<li><p>SOFTMAX</p></li>
+<li><p>CAUCHIT</p></li>
+</ul>
+</p>
+<p>See also NormalizationMethods. </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv415RegressionScore">
+<span id="_CPPv315RegressionScore"></span><span id="_CPPv215RegressionScore"></span><span id="RegressionScore"></span><span class="target" id="classRegressionScore"></span><em class="property">class </em><code class="sig-name descname">RegressionScore</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv413InternalScore" title="InternalScore">InternalScore</a><a class="headerlink" href="#_CPPv415RegressionScore" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Implementation of <a class="reference internal" href="#classInternalScore"><span class="std std-ref">InternalScore</span></a> for regression models. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="math">
+<h2>Math<a class="headerlink" href="#math" title="Permalink to this headline">¶</a></h2>
+<dl class="group">
+<dt>
+<span class="target" id="group__GenericMathFunctions"></span><em>group</em> <code class="sig-name descname">GenericMathFunctions</code></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Functions</p>
+<dl class="function">
+<dt id="_CPPv411closest0or1RKd">
+<span id="_CPPv311closest0or1RKd"></span><span id="_CPPv211closest0or1RKd"></span><span id="closest0or1__doubleCR"></span><span class="target" id="group__GenericMathFunctions_1ga1b1920e340a901a24cb1c8bcf5a7ec0f"></span>double <code class="sig-name descname">closest0or1</code><span class="sig-paren">(</span><em class="property">const</em> double &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411closest0or1RKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46probitKd">
+<span id="_CPPv36probitKd"></span><span id="_CPPv26probitKd"></span><span id="probit__doubleC"></span><span class="target" id="group__GenericMathFunctions_1gadb1db0104b3acd268448c64d016e77b2"></span>double <code class="sig-name descname">probit</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46probitKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45logitKd">
+<span id="_CPPv35logitKd"></span><span id="_CPPv25logitKd"></span><span id="logit__doubleC"></span><span class="target" id="group__GenericMathFunctions_1ga2904af298ba2c9daa6f949294590f98a"></span>double <code class="sig-name descname">logit</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45logitKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44_expKd">
+<span id="_CPPv34_expKd"></span><span id="_CPPv24_expKd"></span><span id="_exp__doubleC"></span><span class="target" id="group__GenericMathFunctions_1ga46f613139810f4599300e3025209cf81"></span>double <code class="sig-name descname">_exp</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44_expKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47cloglogKd">
+<span id="_CPPv37cloglogKd"></span><span id="_CPPv27cloglogKd"></span><span id="cloglog__doubleC"></span><span class="target" id="group__GenericMathFunctions_1ga389343ff0095fe05e701f56ef32c939d"></span>double <code class="sig-name descname">cloglog</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47cloglogKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46loglogKd">
+<span id="_CPPv36loglogKd"></span><span id="_CPPv26loglogKd"></span><span id="loglog__doubleC"></span><span class="target" id="group__GenericMathFunctions_1ga47829cfa9b926765554d2a4889217ec1"></span>double <code class="sig-name descname">loglog</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46loglogKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv47cauchitKd">
+<span id="_CPPv37cauchitKd"></span><span id="_CPPv27cauchitKd"></span><span id="cauchit__doubleC"></span><span class="target" id="group__GenericMathFunctions_1ga635ec4b313557880ce0dcce49d0a0aab"></span>double <code class="sig-name descname">cauchit</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv47cauchitKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46_roundKd">
+<span id="_CPPv36_roundKd"></span><span id="_CPPv26_roundKd"></span><span id="_round__doubleC"></span><span class="target" id="group__GenericMathFunctions_1gafde222348007b8133ff4e30a43e40b43"></span>double <code class="sig-name descname">_round</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46_roundKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv46_floorKd">
+<span id="_CPPv36_floorKd"></span><span id="_CPPv26_floorKd"></span><span id="_floor__doubleC"></span><span class="target" id="group__GenericMathFunctions_1gab0ec9ffc35b5322b282d7f59ae9688ba"></span>double <code class="sig-name descname">_floor</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv46_floorKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45_ceilKd">
+<span id="_CPPv35_ceilKd"></span><span id="_CPPv25_ceilKd"></span><span id="_ceil__doubleC"></span><span class="target" id="group__GenericMathFunctions_1gab76fc473971d3902e2827253c90d427d"></span>double <code class="sig-name descname">_ceil</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45_ceilKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49_identityKd">
+<span id="_CPPv39_identityKd"></span><span id="_CPPv29_identityKd"></span><span id="_identity__doubleC"></span><span class="target" id="group__GenericMathFunctions_1gacfde48ebc1a1794936c65642c333b8ef"></span>double <code class="sig-name descname">_identity</code><span class="sig-paren">(</span><em class="property">const</em> double <em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49_identityKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="group">
+<dt>
+<span class="target" id="group__NormalizationMethods"></span><em>group</em> <code class="sig-name descname">NormalizationMethods</code></dt>
+<dd><p>Implementation of the various normalization methods used in PMML. See <a class="reference external" href="http://dmg.org/pmml/v4-4/Regression.html#xsdType_REGRESSIONNORMALIZATIONMETHOD">PMML Normalization Methods</a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Functions</p>
+<dl class="function">
+<dt id="_CPPv419categorical_softmaxRKNSt6vectorIdEE">
+<span id="_CPPv319categorical_softmaxRKNSt6vectorIdEE"></span><span id="_CPPv219categorical_softmaxRKNSt6vectorIdEE"></span><span id="categorical_softmax__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1gaa075caabdb2c5b7675b8c08f9dc6d4c5"></span>std::vector&lt;double&gt; <code class="sig-name descname">categorical_softmax</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419categorical_softmaxRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv421categorical_simplemaxRKNSt6vectorIdEE">
+<span id="_CPPv321categorical_simplemaxRKNSt6vectorIdEE"></span><span id="_CPPv221categorical_simplemaxRKNSt6vectorIdEE"></span><span id="categorical_simplemax__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1gab01a1d56112b012e82714af8744b01b1"></span>std::vector&lt;double&gt; <code class="sig-name descname">categorical_simplemax</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421categorical_simplemaxRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416categorical_noneRKNSt6vectorIdEE">
+<span id="_CPPv316categorical_noneRKNSt6vectorIdEE"></span><span id="_CPPv216categorical_noneRKNSt6vectorIdEE"></span><span id="categorical_none__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1ga4034caddd4bbde091d85c984e5c800a4"></span>std::vector&lt;double&gt; <code class="sig-name descname">categorical_none</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416categorical_noneRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416categorical_baseRKNSt6vectorIdEENSt8functionIFddEEERKNSt6stringE">
+<span id="_CPPv316categorical_baseRKNSt6vectorIdEENSt8functionIFddEEERKNSt6stringE"></span><span id="_CPPv216categorical_baseRKNSt6vectorIdEENSt8functionIFddEEERKNSt6stringE"></span><span class="target" id="group__NormalizationMethods_1gafbdc6fc82a49c0499d00bf934f2cf6e0"></span>std::vector&lt;double&gt; <code class="sig-name descname">categorical_base</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em>, std::function&lt;double<span class="sig-paren">(</span>double<span class="sig-paren">)</span>&gt; <em>function</em>, <em class="property">const</em> std::string &amp;<em>function_name</em>, <span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416categorical_baseRKNSt6vectorIdEENSt8functionIFddEEERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv417categorical_logitRKNSt6vectorIdEE">
+<span id="_CPPv317categorical_logitRKNSt6vectorIdEE"></span><span id="_CPPv217categorical_logitRKNSt6vectorIdEE"></span><span id="categorical_logit__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1ga83787b184dfa52be19ea87b3f481404b"></span>std::vector&lt;double&gt; <code class="sig-name descname">categorical_logit</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417categorical_logitRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418categorical_probitRKNSt6vectorIdEE">
+<span id="_CPPv318categorical_probitRKNSt6vectorIdEE"></span><span id="_CPPv218categorical_probitRKNSt6vectorIdEE"></span><span id="categorical_probit__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1ga0327c095a1df28153b8b84eb91722d3f"></span>std::vector&lt;double&gt; <code class="sig-name descname">categorical_probit</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418categorical_probitRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419categorical_cloglogRKNSt6vectorIdEE">
+<span id="_CPPv319categorical_cloglogRKNSt6vectorIdEE"></span><span id="_CPPv219categorical_cloglogRKNSt6vectorIdEE"></span><span id="categorical_cloglog__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1ga299bf230eb7dbaab6e51adb9e2ffdf05"></span>std::vector&lt;double&gt; <code class="sig-name descname">categorical_cloglog</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419categorical_cloglogRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv418categorical_loglogRKNSt6vectorIdEE">
+<span id="_CPPv318categorical_loglogRKNSt6vectorIdEE"></span><span id="_CPPv218categorical_loglogRKNSt6vectorIdEE"></span><span id="categorical_loglog__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1ga1bbcb20657277b750bc98e01a6270103"></span>std::vector&lt;double&gt; <code class="sig-name descname">categorical_loglog</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418categorical_loglogRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv419categorical_cauchitRKNSt6vectorIdEE">
+<span id="_CPPv319categorical_cauchitRKNSt6vectorIdEE"></span><span id="_CPPv219categorical_cauchitRKNSt6vectorIdEE"></span><span id="categorical_cauchit__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1ga50055cecb46ff6ae2333ad078d51bc84"></span>std::vector&lt;double&gt; <code class="sig-name descname">categorical_cauchit</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419categorical_cauchitRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412ordinal_baseRKNSt6vectorIdEENSt8functionIFddEEE">
+<span id="_CPPv312ordinal_baseRKNSt6vectorIdEENSt8functionIFddEEE"></span><span id="_CPPv212ordinal_baseRKNSt6vectorIdEENSt8functionIFddEEE"></span><span class="target" id="group__NormalizationMethods_1gaa2156729dd1825c9b8fde717222bb33d"></span>std::vector&lt;double&gt; <code class="sig-name descname">ordinal_base</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em>, std::function&lt;double<span class="sig-paren">(</span>double<span class="sig-paren">)</span>&gt; <em>function</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412ordinal_baseRKNSt6vectorIdEENSt8functionIFddEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413ordinal_logitRKNSt6vectorIdEE">
+<span id="_CPPv313ordinal_logitRKNSt6vectorIdEE"></span><span id="_CPPv213ordinal_logitRKNSt6vectorIdEE"></span><span id="ordinal_logit__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1gace56306180f72fcb59691004aba1dac1"></span>std::vector&lt;double&gt; <code class="sig-name descname">ordinal_logit</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413ordinal_logitRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414ordinal_probitRKNSt6vectorIdEE">
+<span id="_CPPv314ordinal_probitRKNSt6vectorIdEE"></span><span id="_CPPv214ordinal_probitRKNSt6vectorIdEE"></span><span id="ordinal_probit__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1gaaa31bcebf9778a9cbd8fe6414165f1de"></span>std::vector&lt;double&gt; <code class="sig-name descname">ordinal_probit</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414ordinal_probitRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411ordinal_expRKNSt6vectorIdEE">
+<span id="_CPPv311ordinal_expRKNSt6vectorIdEE"></span><span id="_CPPv211ordinal_expRKNSt6vectorIdEE"></span><span id="ordinal_exp__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1gab688e6df6e70f9d081032abc254ec431"></span>std::vector&lt;double&gt; <code class="sig-name descname">ordinal_exp</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411ordinal_expRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415ordinal_cloglogRKNSt6vectorIdEE">
+<span id="_CPPv315ordinal_cloglogRKNSt6vectorIdEE"></span><span id="_CPPv215ordinal_cloglogRKNSt6vectorIdEE"></span><span id="ordinal_cloglog__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1ga534e05619176ee2304b62e332fe2eade"></span>std::vector&lt;double&gt; <code class="sig-name descname">ordinal_cloglog</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415ordinal_cloglogRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414ordinal_loglogRKNSt6vectorIdEE">
+<span id="_CPPv314ordinal_loglogRKNSt6vectorIdEE"></span><span id="_CPPv214ordinal_loglogRKNSt6vectorIdEE"></span><span id="ordinal_loglog__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1gae1dce6ad0dbdfb2d3914c58ff8c1c600"></span>std::vector&lt;double&gt; <code class="sig-name descname">ordinal_loglog</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414ordinal_loglogRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415ordinal_cauchitRKNSt6vectorIdEE">
+<span id="_CPPv315ordinal_cauchitRKNSt6vectorIdEE"></span><span id="_CPPv215ordinal_cauchitRKNSt6vectorIdEE"></span><span id="ordinal_cauchit__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1gae9890594de07d549181743f64bff4c17"></span>std::vector&lt;double&gt; <code class="sig-name descname">ordinal_cauchit</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415ordinal_cauchitRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412ordinal_noneRKNSt6vectorIdEE">
+<span id="_CPPv312ordinal_noneRKNSt6vectorIdEE"></span><span id="_CPPv212ordinal_noneRKNSt6vectorIdEE"></span><span id="ordinal_none__std::vector:double:CR"></span><span class="target" id="group__NormalizationMethods_1ga51127a1167aab6201422a666dba97679"></span>std::vector&lt;double&gt; <code class="sig-name descname">ordinal_none</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;double&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412ordinal_noneRKNSt6vectorIdEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv412single_logitRKd">
+<span id="_CPPv312single_logitRKd"></span><span id="_CPPv212single_logitRKd"></span><span id="single_logit__doubleCR"></span><span class="target" id="group__NormalizationMethods_1ga4eaf6d9a1ed54bf09f44cf0e55452b6e"></span>double <code class="sig-name descname">single_logit</code><span class="sig-paren">(</span><em class="property">const</em> double &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412single_logitRKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414single_softmaxRKd">
+<span id="_CPPv314single_softmaxRKd"></span><span id="_CPPv214single_softmaxRKd"></span><span id="single_softmax__doubleCR"></span><span class="target" id="group__NormalizationMethods_1gaa9c45cb173f59eb062bc105e9f5a805d"></span>double <code class="sig-name descname">single_softmax</code><span class="sig-paren">(</span><em class="property">const</em> double &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414single_softmaxRKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410single_expRKd">
+<span id="_CPPv310single_expRKd"></span><span id="_CPPv210single_expRKd"></span><span id="single_exp__doubleCR"></span><span class="target" id="group__NormalizationMethods_1gac37fe28e2dda06d165859b467d6008de"></span>double <code class="sig-name descname">single_exp</code><span class="sig-paren">(</span><em class="property">const</em> double &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410single_expRKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413single_probitRKd">
+<span id="_CPPv313single_probitRKd"></span><span id="_CPPv213single_probitRKd"></span><span id="single_probit__doubleCR"></span><span class="target" id="group__NormalizationMethods_1ga22cc5825936eb28c4781e5a5516d81e9"></span>double <code class="sig-name descname">single_probit</code><span class="sig-paren">(</span><em class="property">const</em> double &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413single_probitRKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414single_cloglogRKd">
+<span id="_CPPv314single_cloglogRKd"></span><span id="_CPPv214single_cloglogRKd"></span><span id="single_cloglog__doubleCR"></span><span class="target" id="group__NormalizationMethods_1ga2b2bcfa043fa71f006b3fb5c362052b4"></span>double <code class="sig-name descname">single_cloglog</code><span class="sig-paren">(</span><em class="property">const</em> double &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414single_cloglogRKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv413single_loglogRKd">
+<span id="_CPPv313single_loglogRKd"></span><span id="_CPPv213single_loglogRKd"></span><span id="single_loglog__doubleCR"></span><span class="target" id="group__NormalizationMethods_1gad219db09d24b0b7d52027f3f5d27c821"></span>double <code class="sig-name descname">single_loglog</code><span class="sig-paren">(</span><em class="property">const</em> double &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413single_loglogRKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv414single_cauchitRKd">
+<span id="_CPPv314single_cauchitRKd"></span><span id="_CPPv214single_cauchitRKd"></span><span id="single_cauchit__doubleCR"></span><span class="target" id="group__NormalizationMethods_1ga353c64db72f6afc1673e6c9a28d7fd39"></span>double <code class="sig-name descname">single_cauchit</code><span class="sig-paren">(</span><em class="property">const</em> double &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414single_cauchitRKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411single_noneRKd">
+<span id="_CPPv311single_noneRKd"></span><span id="_CPPv211single_noneRKd"></span><span id="single_none__doubleCR"></span><span class="target" id="group__NormalizationMethods_1ga6532f3fb9b3b03032a0af8433f351f63"></span>double <code class="sig-name descname">single_none</code><span class="sig-paren">(</span><em class="property">const</em> double &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411single_noneRKd" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="treetable">
+<h2>TreeTable<a class="headerlink" href="#treetable" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4I000E9TreeTable">
+<span id="_CPPv3I000E9TreeTable"></span><span id="_CPPv2I000E9TreeTable"></span><span class="target" id="classTreeTable"></span>template&lt;class <code class="sig-name descname">K</code>, class <code class="sig-name descname">V</code>, class <code class="sig-name descname">H</code>&gt;<br /><em class="property">class </em><code class="sig-name descname">TreeTable</code><a class="headerlink" href="#_CPPv4I000E9TreeTable" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Tables are an important part of PMML standard. For instance they are the main building block for <a class="reference internal" href="#classMapValues"><span class="std std-ref">MapValues</span></a> transformations.</p>
+<p>In order to reach max efficiency, this class implements a table with access cost linear in the number of columns.</p>
+<p>In other words, given a table with m rows and n columns, this class has access cost of O(n). </p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4I000E13TreeTableNode">
+<span id="_CPPv3I000E13TreeTableNode"></span><span id="_CPPv2I000E13TreeTableNode"></span><span class="target" id="classTreeTableNode"></span>template&lt;class <code class="sig-name descname">K</code>, class <code class="sig-name descname">V</code>, class <code class="sig-name descname">H</code>&gt;<br /><em class="property">class </em><code class="sig-name descname">TreeTableNode</code><a class="headerlink" href="#_CPPv4I000E13TreeTableNode" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Basic building block of a <a class="reference internal" href="#classTreeTable"><span class="std std-ref">TreeTable</span></a>, it can be seen as a column of the table. </p>
+</dd></dl>
+
+</div>
+<div class="section" id="utils">
+<h2>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
+<dl class="group">
+<dt>
+<span class="target" id="group__Utils"></span><em>group</em> <code class="sig-name descname">Utils</code></dt>
+<dd><p>Various utility functions, used also during model scoring. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Functions</p>
+<dl class="function">
+<dt id="_CPPv48to_lowerNSt6stringE">
+<span id="_CPPv38to_lowerNSt6stringE"></span><span id="_CPPv28to_lowerNSt6stringE"></span><span id="to_lower__ss"></span><span class="target" id="group__Utils_1ga1c90dfd7637ff8870a5abfc333d80d6e"></span>std::string <code class="sig-name descname">to_lower</code><span class="sig-paren">(</span>std::string <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48to_lowerNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49to_doubleRKNSt6stringE">
+<span id="_CPPv39to_doubleRKNSt6stringE"></span><span id="_CPPv29to_doubleRKNSt6stringE"></span><span id="to_double__ssCR"></span><span class="target" id="group__Utils_1ga546a81e0cb1d43acc9f839f60368de1a"></span><em class="property">static</em> double <code class="sig-name descname">to_double</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49to_doubleRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0E12parse_string1TRKNSt6stringE">
+<span id="_CPPv3I0E12parse_stringRKNSt6stringE"></span><span id="_CPPv2I0E12parse_stringRKNSt6stringE"></span><span class="target" id="group__Utils_1ga5fb4c0abd8290b5d3e8ec426429e0596"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><a class="reference internal" href="#_CPPv4I0E12parse_string1TRKNSt6stringE" title="parse_string::T">T</a> <code class="sig-name descname">parse_string</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E12parse_string1TRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0E9to_stringNSt6stringERK1T">
+<span id="_CPPv3I0E9to_stringRK1T"></span><span id="_CPPv2I0E9to_stringRK1T"></span><span class="target" id="group__Utils_1gafe05b087244838ced775fa3f28134c34"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br />std::string <code class="sig-name descname">to_string</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0E9to_stringNSt6stringERK1T" title="to_string::T">T</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E9to_stringNSt6stringERK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0E8mkstringNSt6stringERKNSt6vectorI1TEERKNSt6stringE">
+<span id="_CPPv3I0E8mkstringRKNSt6vectorI1TEERKNSt6stringE"></span><span id="_CPPv2I0E8mkstringRKNSt6vectorI1TEERKNSt6stringE"></span><span class="target" id="group__Utils_1ga6ce01a647ae8578bd9d7e616d66c33a1"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br />std::string <code class="sig-name descname">mkstring</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="#_CPPv4I0E8mkstringNSt6stringERKNSt6vectorI1TEERKNSt6stringE" title="mkstring::T">T</a>&gt; &amp;<em>values</em>, <em class="property">const</em> std::string &amp;<em>separator</em> = &quot;,&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E8mkstringNSt6stringERKNSt6vectorI1TEERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0E8mkstringNSt6stringERKNSt3setI1TEERKNSt6stringE">
+<span id="_CPPv3I0E8mkstringRKNSt3setI1TEERKNSt6stringE"></span><span id="_CPPv2I0E8mkstringRKNSt3setI1TEERKNSt6stringE"></span><span class="target" id="group__Utils_1ga62ecc0417f89ca592b6c2de90f3a0329"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br />std::string <code class="sig-name descname">mkstring</code><span class="sig-paren">(</span><em class="property">const</em> std::set&lt;<a class="reference internal" href="#_CPPv4I0E8mkstringNSt6stringERKNSt6vectorI1TEERKNSt6stringE" title="mkstring::T">T</a>&gt; &amp;<em>values</em>, <em class="property">const</em> std::string &amp;<em>separator</em> = &quot;,&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E8mkstringNSt6stringERKNSt3setI1TEERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I00E8mkstringNSt6stringERKNSt13unordered_setI1T1HEERKNSt6stringE">
+<span id="_CPPv3I00E8mkstringRKNSt13unordered_setI1T1HEERKNSt6stringE"></span><span id="_CPPv2I00E8mkstringRKNSt13unordered_setI1T1HEERKNSt6stringE"></span><span class="target" id="group__Utils_1gad9eb0b257c9ece591cbed1bc29a370ce"></span>template&lt;class <code class="sig-name descname">T</code>, class <code class="sig-name descname">H</code>&gt;<br />std::string <code class="sig-name descname">mkstring</code><span class="sig-paren">(</span><em class="property">const</em> std::unordered_set&lt;<a class="reference internal" href="#_CPPv4I00E8mkstringNSt6stringERKNSt13unordered_setI1T1HEERKNSt6stringE" title="mkstring::T">T</a>, <a class="reference internal" href="#_CPPv4I00E8mkstringNSt6stringERKNSt13unordered_setI1T1HEERKNSt6stringE" title="mkstring::H">H</a>&gt; &amp;<em>values</em>, <em class="property">const</em> std::string &amp;<em>separator</em> = &quot;,&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00E8mkstringNSt6stringERKNSt13unordered_setI1T1HEERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I000E9to_stringNSt6stringERKNSt13unordered_mapI1K1V1HEERKNSt6stringE">
+<span id="_CPPv3I000E9to_stringRKNSt13unordered_mapI1K1V1HEERKNSt6stringE"></span><span id="_CPPv2I000E9to_stringRKNSt13unordered_mapI1K1V1HEERKNSt6stringE"></span><span class="target" id="group__Utils_1ga4fd0c1ea38262e6257cf36b44e6d50ae"></span>template&lt;class <code class="sig-name descname">K</code>, class <code class="sig-name descname">V</code>, class <code class="sig-name descname">H</code>&gt;<br />std::string <code class="sig-name descname">to_string</code><span class="sig-paren">(</span><em class="property">const</em> std::unordered_map&lt;<a class="reference internal" href="#_CPPv4I000E9to_stringNSt6stringERKNSt13unordered_mapI1K1V1HEERKNSt6stringE" title="to_string::K">K</a>, <a class="reference internal" href="#_CPPv4I000E9to_stringNSt6stringERKNSt13unordered_mapI1K1V1HEERKNSt6stringE" title="to_string::V">V</a>, <a class="reference internal" href="#_CPPv4I000E9to_stringNSt6stringERKNSt13unordered_mapI1K1V1HEERKNSt6stringE" title="to_string::H">H</a>&gt; &amp;<em>values</em>, <em class="property">const</em> std::string &amp;<em>separator</em> = &quot;,&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I000E9to_stringNSt6stringERKNSt13unordered_mapI1K1V1HEERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I00E8mkstringNSt6stringERKNSt6vectorINSt4pairI1T1UEEEERKNSt6stringE">
+<span id="_CPPv3I00E8mkstringRKNSt6vectorINSt4pairI1T1UEEEERKNSt6stringE"></span><span id="_CPPv2I00E8mkstringRKNSt6vectorINSt4pairI1T1UEEEERKNSt6stringE"></span><span class="target" id="group__Utils_1gada7beb6e8e016a3bcd7b6b82278c9844"></span>template&lt;class <code class="sig-name descname">T</code>, class <code class="sig-name descname">U</code>&gt;<br />std::string <code class="sig-name descname">mkstring</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;std::pair&lt;<a class="reference internal" href="#_CPPv4I00E8mkstringNSt6stringERKNSt6vectorINSt4pairI1T1UEEEERKNSt6stringE" title="mkstring::T">T</a>, <a class="reference internal" href="#_CPPv4I00E8mkstringNSt6stringERKNSt6vectorINSt4pairI1T1UEEEERKNSt6stringE" title="mkstring::U">U</a>&gt;&gt; &amp;<em>values</em>, <em class="property">const</em> std::string &amp;<em>separator</em> = &quot;,&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00E8mkstringNSt6stringERKNSt6vectorINSt4pairI1T1UEEEERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I00E9to_stringNSt6stringERKNSt4pairI1T1VEE">
+<span id="_CPPv3I00E9to_stringRKNSt4pairI1T1VEE"></span><span id="_CPPv2I00E9to_stringRKNSt4pairI1T1VEE"></span><span class="target" id="group__Utils_1ga419db85f9d735ea89a88113f5b154043"></span>template&lt;class <code class="sig-name descname">T</code>, class <code class="sig-name descname">V</code>&gt;<br />std::string <code class="sig-name descname">to_string</code><span class="sig-paren">(</span><em class="property">const</em> std::pair&lt;<a class="reference internal" href="#_CPPv4I00E9to_stringNSt6stringERKNSt4pairI1T1VEE" title="to_string::T">T</a>, <a class="reference internal" href="#_CPPv4I00E9to_stringNSt6stringERKNSt4pairI1T1VEE" title="to_string::V">V</a>&gt; &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00E9to_stringNSt6stringERKNSt4pairI1T1VEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt13unordered_mapI1K1VEE">
+<span id="_CPPv3I00E9to_valuesRKNSt13unordered_mapI1K1VEE"></span><span id="_CPPv2I00E9to_valuesRKNSt13unordered_mapI1K1VEE"></span><span class="target" id="group__Utils_1gafd6be29099a8a085067035a507200a74"></span>template&lt;class <code class="sig-name descname">K</code>, class <code class="sig-name descname">V</code>&gt;<br />std::vector&lt;<a class="reference internal" href="#_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt13unordered_mapI1K1VEE" title="to_values::V">V</a>&gt; <code class="sig-name descname">to_values</code><span class="sig-paren">(</span><em class="property">const</em> std::unordered_map&lt;<a class="reference internal" href="#_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt13unordered_mapI1K1VEE" title="to_values::K">K</a>, <a class="reference internal" href="#_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt13unordered_mapI1K1VEE" title="to_values::V">V</a>&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt13unordered_mapI1K1VEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt3mapI1K1VEE">
+<span id="_CPPv3I00E9to_valuesRKNSt3mapI1K1VEE"></span><span id="_CPPv2I00E9to_valuesRKNSt3mapI1K1VEE"></span><span class="target" id="group__Utils_1gaa4d232ff220a7b73e3de8aef235ef1ca"></span>template&lt;class <code class="sig-name descname">K</code>, class <code class="sig-name descname">V</code>&gt;<br />std::vector&lt;<a class="reference internal" href="#_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt13unordered_mapI1K1VEE" title="to_values::V">V</a>&gt; <code class="sig-name descname">to_values</code><span class="sig-paren">(</span><em class="property">const</em> std::map&lt;<a class="reference internal" href="#_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt13unordered_mapI1K1VEE" title="to_values::K">K</a>, <a class="reference internal" href="#_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt13unordered_mapI1K1VEE" title="to_values::V">V</a>&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00E9to_valuesNSt6vectorI1VEERKNSt3mapI1K1VEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I00E7to_keysNSt6vectorI1KEERKNSt13unordered_mapI1K1VEE">
+<span id="_CPPv3I00E7to_keysRKNSt13unordered_mapI1K1VEE"></span><span id="_CPPv2I00E7to_keysRKNSt13unordered_mapI1K1VEE"></span><span class="target" id="group__Utils_1gaf708d4c97df15fca2b3fcb42bb518528"></span>template&lt;class <code class="sig-name descname">K</code>, class <code class="sig-name descname">V</code>&gt;<br />std::vector&lt;<a class="reference internal" href="#_CPPv4I00E7to_keysNSt6vectorI1KEERKNSt13unordered_mapI1K1VEE" title="to_keys::K">K</a>&gt; <code class="sig-name descname">to_keys</code><span class="sig-paren">(</span><em class="property">const</em> std::unordered_map&lt;<a class="reference internal" href="#_CPPv4I00E7to_keysNSt6vectorI1KEERKNSt13unordered_mapI1K1VEE" title="to_keys::K">K</a>, <a class="reference internal" href="#_CPPv4I00E7to_keysNSt6vectorI1KEERKNSt13unordered_mapI1K1VEE" title="to_keys::V">V</a>&gt; &amp;<em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00E7to_keysNSt6vectorI1KEERKNSt13unordered_mapI1K1VEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45splitNSt6stringERKNSt6stringE">
+<span id="_CPPv35splitNSt6stringERKNSt6stringE"></span><span id="_CPPv25splitNSt6stringERKNSt6stringE"></span><span id="split__ss.ssCR"></span><span class="target" id="group__Utils_1gacb9b3dda90838c544fcf73d3ce3c2f99"></span>std::vector&lt;std::string&gt; <code class="sig-name descname">split</code><span class="sig-paren">(</span>std::string <em>value</em>, <em class="property">const</em> std::string &amp;<em>separator</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45splitNSt6stringERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410remove_allNSt6stringEc">
+<span id="_CPPv310remove_allNSt6stringEc"></span><span id="_CPPv210remove_allNSt6stringEc"></span><span id="remove_all__ss.c"></span><span class="target" id="group__Utils_1ga3a1f3f4c8fbb231f57ba9a41e0d5027a"></span>std::string <code class="sig-name descname">remove_all</code><span class="sig-paren">(</span>std::string <em>value</em>, char <em>to_remove</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410remove_allNSt6stringEc" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv416parse_boolstringRKNSt6stringE">
+<span id="_CPPv316parse_boolstringRKNSt6stringE"></span><span id="_CPPv216parse_boolstringRKNSt6stringE"></span><span id="parse_boolstring__ssCR"></span><span class="target" id="group__Utils_1ga91d5270fd0a4339f0228030eae62add1"></span>bool <code class="sig-name descname">parse_boolstring</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416parse_boolstringRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410double_minv">
+<span id="_CPPv310double_minv"></span><span id="_CPPv210double_minv"></span><span id="double_min"></span><span class="target" id="group__Utils_1ga726d856009344d048d8b3664d2fade8c"></span>double <code class="sig-name descname">double_min</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410double_minv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45ltrimRNSt6stringE">
+<span id="_CPPv35ltrimRNSt6stringE"></span><span id="_CPPv25ltrimRNSt6stringE"></span><span id="ltrim__ssR"></span><span class="target" id="group__Utils_1gabc3e05de3b9a7518e4b79f789ac32fc2"></span><em class="property">static</em> std::string &amp;<code class="sig-name descname">ltrim</code><span class="sig-paren">(</span>std::string &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45ltrimRNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv45rtrimRNSt6stringE">
+<span id="_CPPv35rtrimRNSt6stringE"></span><span id="_CPPv25rtrimRNSt6stringE"></span><span id="rtrim__ssR"></span><span class="target" id="group__Utils_1gaeb0502cfa0286df2ea5da76564fbc0d9"></span><em class="property">static</em> std::string &amp;<code class="sig-name descname">rtrim</code><span class="sig-paren">(</span>std::string &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv45rtrimRNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv44trimRNSt6stringE">
+<span id="_CPPv34trimRNSt6stringE"></span><span id="_CPPv24trimRNSt6stringE"></span><span id="trim__ssR"></span><span class="target" id="group__Utils_1ga1fd5b09c2d05ba0c3530ce327b9bf1eb"></span><em class="property">static</em> std::string &amp;<code class="sig-name descname">trim</code><span class="sig-paren">(</span>std::string &amp;<em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv44trimRNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48read_xmlRKNSt6stringE">
+<span id="_CPPv38read_xmlRKNSt6stringE"></span><span id="_CPPv28read_xmlRKNSt6stringE"></span><span id="read_xml__ssCR"></span><span class="target" id="group__Utils_1ga66750f67ba3aed26d21c80c8534f303b"></span><em class="property">static</em> std::vector&lt;char&gt; <code class="sig-name descname">read_xml</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48read_xmlRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv415mz_reader_errorP14mz_zip_archiveRKNSt6stringE">
+<span id="_CPPv315mz_reader_errorP14mz_zip_archiveRKNSt6stringE"></span><span id="_CPPv215mz_reader_errorP14mz_zip_archiveRKNSt6stringE"></span><span id="mz_reader_error__mz_zip_archiveP.ssCR"></span><span class="target" id="group__Utils_1ga27b553eca47f6da92d0c629909f3cd45"></span><em class="property">static</em> void <code class="sig-name descname">mz_reader_error</code><span class="sig-paren">(</span>mz_zip_archive *<em>zip_archive</em>, <em class="property">const</em> std::string &amp;<em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415mz_reader_errorP14mz_zip_archiveRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv48read_zipRKNSt6stringE">
+<span id="_CPPv38read_zipRKNSt6stringE"></span><span id="_CPPv28read_zipRKNSt6stringE"></span><span id="read_zip__ssCR"></span><span class="target" id="group__Utils_1ga6bcd17d12a1532edf49d411f46b4fcaf"></span><em class="property">static</em> std::vector&lt;char&gt; <code class="sig-name descname">read_zip</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48read_zipRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv411file_existsRKNSt6stringE">
+<span id="_CPPv311file_existsRKNSt6stringE"></span><span id="_CPPv211file_existsRKNSt6stringE"></span><span id="file_exists__ssCR"></span><span class="target" id="group__Utils_1gad64419bcb994f2b458d8617135932618"></span><em class="property">static</em> bool <code class="sig-name descname">file_exists</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411file_existsRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv49read_fileRKNSt6stringEKb">
+<span id="_CPPv39read_fileRKNSt6stringEKb"></span><span id="_CPPv29read_fileRKNSt6stringEKb"></span><span id="read_file__ssCR.bC"></span><span class="target" id="group__Utils_1ga4a4df8f5efb875d10460a7b7c89d0d64"></span><em class="property">static</em> std::vector&lt;char&gt; <code class="sig-name descname">read_file</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>filepath</em>, <em class="property">const</em> bool <em>zipped</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49read_fileRKNSt6stringEKb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0E10format_numNSt6stringERK1T">
+<span id="_CPPv3I0E10format_numRK1T"></span><span id="_CPPv2I0E10format_numRK1T"></span><span class="target" id="group__Utils_1gafffcf2333024b400cd9322bc29700517"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br />std::string <code class="sig-name descname">format_num</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0E10format_numNSt6stringERK1T" title="format_num::T">T</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E10format_numNSt6stringERK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv410format_intRKi">
+<span id="_CPPv310format_intRKi"></span><span id="_CPPv210format_intRKi"></span><span id="format_int__iCR"></span><span class="target" id="group__Utils_1ga6a0b97b089ca4c0bb0b0bd516e9d4076"></span>std::string <code class="sig-name descname">format_int</code><span class="sig-paren">(</span><em class="property">const</em> int &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410format_intRKi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4I0DpE11make_uniqueNSt10unique_ptrI1TEEDpRR4Args">
+<span id="_CPPv3I0DpE11make_uniqueDpRR4Args"></span><span id="_CPPv2I0DpE11make_uniqueDpRR4Args"></span><span class="target" id="group__Utils_1ga4519a6e5329b53320d3d7826ed281616"></span>template&lt;typename <code class="sig-name descname">T</code>, typename ...<code class="sig-name descname">Args</code>&gt;<br />std::unique_ptr&lt;<a class="reference internal" href="#_CPPv4I0DpE11make_uniqueNSt10unique_ptrI1TEEDpRR4Args" title="make_unique::T">T</a>&gt; <code class="sig-name descname">make_unique</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpE11make_uniqueNSt10unique_ptrI1TEEDpRR4Args" title="make_unique::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpE11make_uniqueNSt10unique_ptrI1TEEDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv49CSVReader">
+<span id="_CPPv39CSVReader"></span><span id="_CPPv29CSVReader"></span><span id="CSVReader"></span><span class="target" id="classCSVReader"></span><em class="property">class </em><code class="sig-name descname">CSVReader</code><a class="headerlink" href="#_CPPv49CSVReader" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class implementing a simple csv file reader.</p>
+<p>Though it is used for benchmarking and testing of cPMML, it is not part of its core or of its API, since it’s best-effort and not directly involved in model scoring. </p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="glossary.html" class="btn btn-neutral float-left" title="Glossary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 AMADEUS. All rights reserved.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+<style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+        background: #0a5db5; /* Amadeus blue */
+    }
+    /*!* Sidebar *!*/
+    /*.wy-nav-side {*/
+    /*    background: #ff0000;*/
+    /*}*/
+</style>
+
+
+</body>
+</html>

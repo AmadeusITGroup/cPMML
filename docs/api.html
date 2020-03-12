@@ -1,0 +1,592 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; cPMML  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PMML Support" href="pmml_support.html" />
+    <link rel="prev" title="Install" href="installing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cPMML
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Docs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Install</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prediction">Prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#errors">Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pmml_support.html">PMML Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cPMML</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="model">
+<h2>Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N5cpmml5ModelE">
+<span id="_CPPv3N5cpmml5ModelE"></span><span id="_CPPv2N5cpmml5ModelE"></span><span id="cpmml::Model"></span><span class="target" id="classcpmml_1_1Model"></span><em class="property">class </em><code class="sig-name descname">Model</code><a class="headerlink" href="#_CPPv4N5cpmml5ModelE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing a PMML model. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N5cpmml5Model5ModelERKNSt6stringEKb">
+<span id="_CPPv3N5cpmml5Model5ModelERKNSt6stringEKb"></span><span id="_CPPv2N5cpmml5Model5ModelERKNSt6stringEKb"></span><span id="cpmml::Model::Model__ssCR.bC"></span><span class="target" id="classcpmml_1_1Model_1a2be4c96b3d163aeb5c6a2628c84f34b1"></span><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>model_filepath</em>, <em class="property">const</em> bool <em>zipped</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5cpmml5Model5ModelERKNSt6stringEKb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs a <a class="reference internal" href="#classcpmml_1_1Model"><span class="std std-ref">cpmml::Model</span></a> instance representing the PMML model stored at <em>model_filepath</em>. </p>
+<p>It triggers the <em>model load</em> process: the XML elements are visited and the corresponding internal cPMML objects are built.</p>
+<p>It is responsibility of the user to ensure the input file is compliant with the <a class="reference external" href="http://dmg.org/pmml/v4-4/pmml-4-4.xsd">PMML XML schema</a>. Creating <a class="reference internal" href="#classcpmml_1_1Model"><span class="std std-ref">cpmml::Model</span></a> instances from incorrect PMML files may result in undefined behavior.</p>
+<p><a class="reference internal" href="#classcpmml_1_1ParsingException"><span class="std std-ref">cpmml::ParsingException</span></a> will be thrown in case <em>model_path</em> does not exists.</p>
+<p>File extension is not taken into account.</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model_filepath</span></code>: path to the XML file containing the PMML model. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zipped</span></code>: *(optional)* it allows to specify whether the input file is compressed in zip format. The default value is <em>false</em>.</p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#classcpmml_1_1ParsingException"><span class="std std-ref"><span class="pre">cpmml::ParsingException</span></span></a></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#classcpmml_1_1InvalidValueException"><span class="std std-ref"><span class="pre">cpmml::InvalidValueException</span></span></a></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#classcpmml_1_1MissingValueException"><span class="std std-ref"><span class="pre">cpmml::MissingValueException</span></span></a></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><strong>Examples</strong></p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cpmml</span><span class="p">::</span><span class="n">Model</span> <span class="n">model</span><span class="p">(</span><span class="s2">&quot;IrisTree.xml&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+ <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cpmml</span><span class="p">::</span><span class="n">Model</span> <span class="n">model</span><span class="p">(</span><span class="s2">&quot;AuditRandomForest.zip&quot;</span><span class="p">,</span> <span class="n">true</span><span class="p">);</span>
+</pre></div>
+</div>
+ </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5cpmml5Model8validateERKNSt13unordered_mapINSt6stringENSt6stringEEE">
+<span id="_CPPv3NK5cpmml5Model8validateERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="_CPPv2NK5cpmml5Model8validateERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="cpmml::Model::validate__std::unordered_map:ss.ss:CRC"></span><span class="target" id="classcpmml_1_1Model_1a395768265205a236fb902af944ae8752"></span>bool <code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="property">const</em> std::unordered_map&lt;std::string, std::string&gt; &amp;<em>sample</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5cpmml5Model8validateERKNSt13unordered_mapINSt6stringENSt6stringEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Validates user input in <em>sample</em> against the constraints defined in the <a class="reference external" href="http://dmg.org/pmml/v4-4/DataDictionary.html">PMML DataDictionary</a>. </p>
+<p>The PMML standard allows to define constraints on every input field of the model in order to determine the validity of the values assumed by the variables. For continuous fields, it is verified they fall in a certain range. For categorical fields, it is checked they assume a value among a list of possible ones. Being PMML strongly typed, also the type of the input variables is checked.</p>
+<p>In addition, if <a class="reference external" href="http://dmg.org/pmml/v4-4/Transformations.html">PMML TransformationDictionary</a> is present, it is also checked the possibility to compute all transformations needed for the model.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><em>true</em> in case of valid input <em>sample</em>. <em>false</em> otherwise.</p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sample</span></code>: hash map where the keys are strings representing feature names and the values are strings representing features values. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><strong>Examples</strong></p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cpmml::Model model(&quot;IrisTree.xml&quot;);
+std::unordered_map&lt;std::string, std::string&gt; sample = {
+  {&quot;sepal_length&quot;, &quot;6.6&quot;},
+  {&quot;sepal_width&quot;, &quot;2.9&quot;},
+  {&quot;petal_length&quot;, &quot;4.6&quot;},
+  {&quot;petal_width&quot;, &quot;1.3&quot;}
+};
+
+if(!model.validate(sample)) std::cout &lt;&lt; &quot;Invalid input for model&quot; &lt;&lt;
+std::endl;
+</pre></div>
+</div>
+ </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5cpmml5Model5scoreERKNSt13unordered_mapINSt6stringENSt6stringEEE">
+<span id="_CPPv3NK5cpmml5Model5scoreERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="_CPPv2NK5cpmml5Model5scoreERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="cpmml::Model::score__std::unordered_map:ss.ss:CRC"></span><span class="target" id="classcpmml_1_1Model_1a1815a1873ad0480686543509754035e6"></span><a class="reference internal" href="#_CPPv4N5cpmml10PredictionE" title="cpmml::Prediction">Prediction</a> <code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="property">const</em> std::unordered_map&lt;std::string, std::string&gt; &amp;<em>sample</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5cpmml5Model5scoreERKNSt13unordered_mapINSt6stringENSt6stringEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Scores the model against the user input in <em>sample</em>. </p>
+<p>It triggers the <em>model scoring</em> process: the input values are preprocessed, validated, used as input for the PMML model and the resulting prediction is postprocessed.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>An instance of <a class="reference internal" href="#classcpmml_1_1Prediction"><span class="std std-ref">cpmml::Prediction</span></a></p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sample</span></code>: hash map where the keys are strings representing feature names and the values are strings representing features values. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#classcpmml_1_1InvalidValueException"><span class="std std-ref"><span class="pre">cpmml::InvalidValueException</span></span></a></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#classcpmml_1_1MissingValueException"><span class="std std-ref"><span class="pre">cpmml::MissingValueException</span></span></a></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#classcpmml_1_1MathException"><span class="std std-ref"><span class="pre">cpmml::MathException</span></span></a></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><strong>Examples</strong></p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cpmml</span><span class="p">::</span><span class="n">Model</span> <span class="n">model</span><span class="p">(</span><span class="s2">&quot;IrisTree.xml&quot;</span><span class="p">);</span>
+<span class="n">std</span><span class="p">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">sample</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">{</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;6.6&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;2.9&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;4.6&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;petal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;1.3&quot;</span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">cpmml</span><span class="p">::</span><span class="n">Prediction</span> <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">sample</span><span class="p">);</span>
+</pre></div>
+</div>
+ </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5cpmml5Model7predictERKNSt13unordered_mapINSt6stringENSt6stringEEE">
+<span id="_CPPv3NK5cpmml5Model7predictERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="_CPPv2NK5cpmml5Model7predictERKNSt13unordered_mapINSt6stringENSt6stringEEE"></span><span id="cpmml::Model::predict__std::unordered_map:ss.ss:CRC"></span><span class="target" id="classcpmml_1_1Model_1ad47c45b04153f1694ae15c0114f0cc1f"></span>std::string <code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="property">const</em> std::unordered_map&lt;std::string, std::string&gt; &amp;<em>sample</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5cpmml5Model7predictERKNSt13unordered_mapINSt6stringENSt6stringEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Scores the model against the user input in <em>sample</em>. </p>
+<p>It triggers a minimal version of the <em>model scoring</em> process: the input values are preprocessed, validated, used as input for the PMML model and the raw resulting prediction is returned.</p>
+<p>It has been included to easily retrieve the raw prediction value in case of no interest for other model outputs (eg. probabilities, etc.).</p>
+<p>In addition, returning the raw prediction allows further internal optimization. Thus, <a class="reference internal" href="#classcpmml_1_1Model_1ad47c45b04153f1694ae15c0114f0cc1f"><span class="std std-ref">cpmml::Model::predict</span></a> achieves a significant speedup compared to <a class="reference internal" href="#classcpmml_1_1Model_1a1815a1873ad0480686543509754035e6"><span class="std std-ref">cpmml::Model::score</span></a>.</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A string containing the raw prediction.</p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sample</span></code>: hash map where the keys are strings representing feature names and the values are strings representing features values. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#classcpmml_1_1InvalidValueException"><span class="std std-ref"><span class="pre">cpmml::InvalidValueException</span></span></a></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#classcpmml_1_1MissingValueException"><span class="std std-ref"><span class="pre">cpmml::MissingValueException</span></span></a></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#classcpmml_1_1MathException"><span class="std std-ref"><span class="pre">cpmml::MathException</span></span></a></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><strong>Examples</strong></p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cpmml</span><span class="p">::</span><span class="n">Model</span> <span class="n">model</span><span class="p">(</span><span class="s2">&quot;IrisTree.xml&quot;</span><span class="p">);</span>
+<span class="n">std</span><span class="p">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">sample</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">{</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;6.6&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;2.9&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;4.6&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;petal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;1.3&quot;</span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sample</span><span class="p">);</span> <span class="o">//</span> <span class="s2">&quot;Iris-versicolor&quot;</span>
+</pre></div>
+</div>
+ </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="prediction">
+<h2>Prediction<a class="headerlink" href="#prediction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N5cpmml10PredictionE">
+<span id="_CPPv3N5cpmml10PredictionE"></span><span id="_CPPv2N5cpmml10PredictionE"></span><span id="cpmml::Prediction"></span><span class="target" id="classcpmml_1_1Prediction"></span><em class="property">class </em><code class="sig-name descname">Prediction</code><a class="headerlink" href="#_CPPv4N5cpmml10PredictionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Class representing a prediction. </p>
+<p>This class has no corresponding PMML element since it contains the output of a PMML model evaluation.</p>
+<p>It stores the predicted value, already transformed through <a class="reference external" href="http://dmg.org/pmml/v4-4/Targets.html">PMML Target</a>, along with the additional outputs provided by <a class="reference external" href="http://dmg.org/pmml/v4-4/Output.html">PMML Output</a>. In addition, for classification models allowing the calculation of target probabilities, it provides the probability for each target class. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4NK5cpmml10Prediction9as_stringEv">
+<span id="_CPPv3NK5cpmml10Prediction9as_stringEv"></span><span id="_CPPv2NK5cpmml10Prediction9as_stringEv"></span><span id="cpmml::Prediction::as_stringC"></span><span class="target" id="classcpmml_1_1Prediction_1aee4076045aea0dafb9ec74699cab90da"></span>std::string <code class="sig-name descname">as_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5cpmml10Prediction9as_stringEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>It returns the predicted value as a string. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5cpmml10Prediction9as_doubleEv">
+<span id="_CPPv3NK5cpmml10Prediction9as_doubleEv"></span><span id="_CPPv2NK5cpmml10Prediction9as_doubleEv"></span><span id="cpmml::Prediction::as_doubleC"></span><span class="target" id="classcpmml_1_1Prediction_1a797b49933e4a4494298a1e6b916b6517"></span>double <code class="sig-name descname">as_double</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5cpmml10Prediction9as_doubleEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>It returns the predicted value as a double. In case the predicted value cannot be converted to double, it will return <a class="reference external" href="https://en.cppreference.com/w/cpp/types/numeric_limits/min">std::numeric_limits&lt;double&gt;::min()</a>. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5cpmml10Prediction12distributionEv">
+<span id="_CPPv3NK5cpmml10Prediction12distributionEv"></span><span id="_CPPv2NK5cpmml10Prediction12distributionEv"></span><span id="cpmml::Prediction::distributionC"></span><span class="target" id="classcpmml_1_1Prediction_1aed9c3500e6248ed0f9d8e13cdb1cb781"></span>std::unordered_map&lt;std::string, double&gt; <code class="sig-name descname">distribution</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5cpmml10Prediction12distributionEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>It returns an hash map of string -&gt; double pairs, where the keys are the target categories and the values are the associated probabilities computed by the model. </p>
+<p></p>
+<p><strong>Examples</strong></p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cpmml</span><span class="p">::</span><span class="n">Model</span> <span class="n">model</span><span class="p">(</span><span class="n">model_filepath</span><span class="p">);</span>
+<span class="n">std</span><span class="p">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">sample</span> <span class="o">=</span> <span class="p">{</span>
+ <span class="p">{</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;6.6&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;2.9&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;4.6&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s2">&quot;petal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;1.3&quot;</span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">cpmml</span><span class="p">::</span><span class="n">Prediction</span> <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">sample</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">auto</span> <span class="o">&amp;</span><span class="n">probability</span> <span class="p">:</span> <span class="n">prediction</span><span class="o">.</span><span class="n">distribution</span><span class="p">())</span>
+   <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">probability</span><span class="o">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">probability</span><span class="o">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span>
+<span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="o">//</span> <span class="s2">&quot;Iris-virginica: 0.0810811&quot;</span>
+<span class="o">//</span> <span class="s2">&quot;Iris-setosa: 0&quot;</span>
+<span class="o">//</span> <span class="s2">&quot;Iris-versicolor: 0.918919&quot;</span>
+</pre></div>
+</div>
+ </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5cpmml10Prediction11num_outputsEv">
+<span id="_CPPv3NK5cpmml10Prediction11num_outputsEv"></span><span id="_CPPv2NK5cpmml10Prediction11num_outputsEv"></span><span id="cpmml::Prediction::num_outputsC"></span><span class="target" id="classcpmml_1_1Prediction_1aaf3c29f32d5180152f1879103c0b6d55"></span>std::unordered_map&lt;std::string, double&gt; <code class="sig-name descname">num_outputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5cpmml10Prediction11num_outputsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>It returns an hash map of string -&gt; double pairs, where the keys are the output field names and the values their corresponding value. Among all the output fields available for a model, it contains just numeric output fields. </p>
+<p></p>
+<p><strong>Examples</strong></p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cpmml</span><span class="p">::</span><span class="n">Model</span> <span class="n">model</span><span class="p">(</span><span class="n">model_filepath</span><span class="p">);</span>
+<span class="n">std</span><span class="p">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">sample</span> <span class="o">=</span> <span class="p">{</span>
+ <span class="p">{</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;6.6&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;2.9&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;4.6&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s2">&quot;petal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;1.3&quot;</span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">cpmml</span><span class="p">::</span><span class="n">Prediction</span> <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">sample</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">const</span> <span class="n">auto</span> <span class="o">&amp;</span><span class="n">output</span> <span class="p">:</span> <span class="n">prediction</span><span class="o">.</span><span class="n">num_outputs</span><span class="p">())</span>
+   <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">output</span><span class="o">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">output</span><span class="o">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="o">//</span> <span class="s2">&quot;Probability_Iris-setosa: 0&quot;</span>
+<span class="o">//</span> <span class="s2">&quot;Probability_Iris-virginica: 0.0810811&quot;</span>
+<span class="o">//</span> <span class="s2">&quot;Probability_Iris-versicolor: 0.918919&quot;</span>
+</pre></div>
+</div>
+ </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5cpmml10Prediction11str_outputsEv">
+<span id="_CPPv3NK5cpmml10Prediction11str_outputsEv"></span><span id="_CPPv2NK5cpmml10Prediction11str_outputsEv"></span><span id="cpmml::Prediction::str_outputsC"></span><span class="target" id="classcpmml_1_1Prediction_1a72592f37df8e185f1916e36669bc60f6"></span>std::unordered_map&lt;std::string, std::string&gt; <code class="sig-name descname">str_outputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5cpmml10Prediction11str_outputsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>It returns an hash map of string -&gt; string pairs, where the keys are the output field names and the values their corresponding value. Among all the output fields available for a model, it contains just categorical output fields. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N5cpmml9ExceptionE">
+<span id="_CPPv3N5cpmml9ExceptionE"></span><span id="_CPPv2N5cpmml9ExceptionE"></span><span id="cpmml::Exception"></span><span class="target" id="classcpmml_1_1Exception"></span><em class="property">class </em><code class="sig-name descname">Exception</code> : <em class="property">public</em> exception<a class="headerlink" href="#_CPPv4N5cpmml9ExceptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Base class for all exceptions generated by cPMML. </p>
+<p>Subclassed by <a class="reference internal" href="#classcpmml_1_1InvalidValueException"><span class="std std-ref">cpmml::InvalidValueException</span></a>, <a class="reference internal" href="#classcpmml_1_1MathException"><span class="std std-ref">cpmml::MathException</span></a>, <a class="reference internal" href="#classcpmml_1_1MissingValueException"><span class="std std-ref">cpmml::MissingValueException</span></a>, <a class="reference internal" href="#classcpmml_1_1ParsingException"><span class="std std-ref">cpmml::ParsingException</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N5cpmml9Exception9ExceptionERKNSt6stringE">
+<span id="_CPPv3N5cpmml9Exception9ExceptionERKNSt6stringE"></span><span id="_CPPv2N5cpmml9Exception9ExceptionERKNSt6stringE"></span><span id="cpmml::Exception::Exception__ssCR"></span><span class="target" id="classcpmml_1_1Exception_1a5b6db6e5bb383a3db17202ba404b0764"></span><code class="sig-name descname">Exception</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5cpmml9Exception9ExceptionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs a new <a class="reference internal" href="#classcpmml_1_1Exception"><span class="std std-ref">Exception</span></a> object. <dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">message</span></code>: explanatory string providing more details about the error. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK5cpmml9Exception4whatEv">
+<span id="_CPPv3NK5cpmml9Exception4whatEv"></span><span id="_CPPv2NK5cpmml9Exception4whatEv"></span><span id="cpmml::Exception::whatC"></span><span class="target" id="classcpmml_1_1Exception_1ae65f76e1f036d53a4ab1cfaaa9187c09"></span><em class="property">virtual</em> <em class="property">const</em> char *<code class="sig-name descname">what</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK5cpmml9Exception4whatEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>an explanatory string providing more details about the error. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4N5cpmml21MissingValueExceptionE">
+<span id="_CPPv3N5cpmml21MissingValueExceptionE"></span><span id="_CPPv2N5cpmml21MissingValueExceptionE"></span><span id="cpmml::MissingValueException"></span><span class="target" id="classcpmml_1_1MissingValueException"></span><em class="property">class </em><code class="sig-name descname">MissingValueException</code> : <em class="property">public</em> cpmml::<a class="reference internal" href="#_CPPv4N5cpmml9ExceptionE" title="cpmml::Exception">Exception</a><a class="headerlink" href="#_CPPv4N5cpmml21MissingValueExceptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reports errors related to the absence of values in user input. </p>
+<p>For instance a missing feature in a sample to be scored. Notice that, depending on the underlying PMML, some models may tolerate missing values. It is generated during model scoring. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N5cpmml21MissingValueException21MissingValueExceptionERKNSt6stringE">
+<span id="_CPPv3N5cpmml21MissingValueException21MissingValueExceptionERKNSt6stringE"></span><span id="_CPPv2N5cpmml21MissingValueException21MissingValueExceptionERKNSt6stringE"></span><span id="cpmml::MissingValueException::MissingValueException__ssCR"></span><span class="target" id="classcpmml_1_1MissingValueException_1a5c8916560f94aedbfdd9e313b9910e23"></span><code class="sig-name descname">MissingValueException</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5cpmml21MissingValueException21MissingValueExceptionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs a new <a class="reference internal" href="#classcpmml_1_1MissingValueException"><span class="std std-ref">MissingValueException</span></a> object. <dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">message</span></code>: explanatory string providing more details about the error. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4N5cpmml21InvalidValueExceptionE">
+<span id="_CPPv3N5cpmml21InvalidValueExceptionE"></span><span id="_CPPv2N5cpmml21InvalidValueExceptionE"></span><span id="cpmml::InvalidValueException"></span><span class="target" id="classcpmml_1_1InvalidValueException"></span><em class="property">class </em><code class="sig-name descname">InvalidValueException</code> : <em class="property">public</em> cpmml::<a class="reference internal" href="#_CPPv4N5cpmml9ExceptionE" title="cpmml::Exception">Exception</a><a class="headerlink" href="#_CPPv4N5cpmml21InvalidValueExceptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reports errors related to the presence of wrong values in user input. </p>
+<p>For instance a categorical feature assuming a value not in the domain or continuous features assuming a value outside certain boundaries. It is generated during input validation or during model scoring. <dl class="simple">
+<dt><strong>See</strong></dt><dd><p><a class="reference internal" href="#classcpmml_1_1Model_1a395768265205a236fb902af944ae8752"><span class="std std-ref">Model::validate</span></a> </p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N5cpmml21InvalidValueException21InvalidValueExceptionERKNSt6stringE">
+<span id="_CPPv3N5cpmml21InvalidValueException21InvalidValueExceptionERKNSt6stringE"></span><span id="_CPPv2N5cpmml21InvalidValueException21InvalidValueExceptionERKNSt6stringE"></span><span id="cpmml::InvalidValueException::InvalidValueException__ssCR"></span><span class="target" id="classcpmml_1_1InvalidValueException_1a619e1ea14be04c584134e44a54ebb0a7"></span><code class="sig-name descname">InvalidValueException</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5cpmml21InvalidValueException21InvalidValueExceptionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs a new <a class="reference internal" href="#classcpmml_1_1InvalidValueException"><span class="std std-ref">InvalidValueException</span></a> object. <dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">message</span></code>: explanatory string providing more details about the error. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4N5cpmml13MathExceptionE">
+<span id="_CPPv3N5cpmml13MathExceptionE"></span><span id="_CPPv2N5cpmml13MathExceptionE"></span><span id="cpmml::MathException"></span><span class="target" id="classcpmml_1_1MathException"></span><em class="property">class </em><code class="sig-name descname">MathException</code> : <em class="property">public</em> cpmml::<a class="reference internal" href="#_CPPv4N5cpmml9ExceptionE" title="cpmml::Exception">Exception</a><a class="headerlink" href="#_CPPv4N5cpmml13MathExceptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reports errors encountered in the computation of a mathematical function. For example when a normalization methods receives wrong values. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N5cpmml13MathException13MathExceptionERKNSt6stringE">
+<span id="_CPPv3N5cpmml13MathException13MathExceptionERKNSt6stringE"></span><span id="_CPPv2N5cpmml13MathException13MathExceptionERKNSt6stringE"></span><span id="cpmml::MathException::MathException__ssCR"></span><span class="target" id="classcpmml_1_1MathException_1a9b1db6c96ddf1eb89d06eef3d248a338"></span><code class="sig-name descname">MathException</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5cpmml13MathException13MathExceptionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs a new <a class="reference internal" href="#classcpmml_1_1MathException"><span class="std std-ref">MathException</span></a> object. <dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">message</span></code>: explanatory string providing more details about the error. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4N5cpmml16ParsingExceptionE">
+<span id="_CPPv3N5cpmml16ParsingExceptionE"></span><span id="_CPPv2N5cpmml16ParsingExceptionE"></span><span id="cpmml::ParsingException"></span><span class="target" id="classcpmml_1_1ParsingException"></span><em class="property">class </em><code class="sig-name descname">ParsingException</code> : <em class="property">public</em> cpmml::<a class="reference internal" href="#_CPPv4N5cpmml9ExceptionE" title="cpmml::Exception">Exception</a><a class="headerlink" href="#_CPPv4N5cpmml16ParsingExceptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reports errors related to the parsing of the user input or of the PMML file representing the model. </p>
+<p>For instance this error could be triggered in case a certain PMML element or attribute, needed for the scoring, is missing.</p>
+<p><dl class="simple">
+<dt><strong>See</strong></dt><dd><p><a class="reference internal" href="#classcpmml_1_1Model"><span class="std std-ref">Model</span></a> </p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N5cpmml16ParsingException16ParsingExceptionERKNSt6stringE">
+<span id="_CPPv3N5cpmml16ParsingException16ParsingExceptionERKNSt6stringE"></span><span id="_CPPv2N5cpmml16ParsingException16ParsingExceptionERKNSt6stringE"></span><span id="cpmml::ParsingException::ParsingException__ssCR"></span><span class="target" id="classcpmml_1_1ParsingException_1a7611a8b3ea3a88393cad790e2be56a4b"></span><code class="sig-name descname">ParsingException</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5cpmml16ParsingException16ParsingExceptionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs a new <a class="reference internal" href="#classcpmml_1_1ParsingException"><span class="std std-ref">ParsingException</span></a> object. <dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">message</span></code>: explanatory string providing more details about the error. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pmml_support.html" class="btn btn-neutral float-right" title="PMML Support" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installing.html" class="btn btn-neutral float-left" title="Install" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 AMADEUS. All rights reserved.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+<style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+        background: #0a5db5; /* Amadeus blue */
+    }
+    /*!* Sidebar *!*/
+    /*.wy-nav-side {*/
+    /*    background: #ff0000;*/
+    /*}*/
+</style>
+
+
+</body>
+</html>

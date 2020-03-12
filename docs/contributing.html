@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Contributing &mdash; cPMML  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Internals" href="internals.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cPMML
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Docs</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pmml_support.html">PMML Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pull-requests">Pull Requests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#licensing-of-contributed-material">Licensing of contributed material</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#version-control-branching">Version control branching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-formatting">Code formatting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-quality">Code quality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multithreading">Multithreading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tests">Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#benchmarks">Benchmarks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#issues">Issues</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#due-diligence">Due diligence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-to-put-in-your-issue-report">What to put in your issue report</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cPMML</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Contributing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
+<p>When contributing to this repository, please first discuss the change you wish to make via issue,
+email, or any other method with the owners of this repository before making a change.</p>
+<div class="section" id="pull-requests">
+<h2>Pull Requests<a class="headerlink" href="#pull-requests" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="licensing-of-contributed-material">
+<h3>Licensing of contributed material<a class="headerlink" href="#licensing-of-contributed-material" title="Permalink to this headline">¶</a></h3>
+<p>Keep in mind as you contribute, that code, docs and other material submitted to the
+<em>cPMML</em> project are considered licensed under the terms of the <a class="reference external" href="LICENSE.md">MIT license</a>.</p>
+</div>
+<div class="section" id="version-control-branching">
+<h3>Version control branching<a class="headerlink" href="#version-control-branching" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Always <strong>make a new branch</strong> for your work, no matter how small.</p></li>
+<li><p><strong>Don’t submit unrelated changes in the same branch/pull request</strong></p></li>
+<li><p><strong>Base your new branch off of the appropriate branch</strong> on the main
+repository:</p>
+<ul>
+<li><p><strong>Bug fixes</strong> should be based on the branch named after the <strong>oldest
+supported release line</strong> the bug affects.</p></li>
+<li><p><strong>New features</strong> should branch off of <strong>the ‘master’ branch</strong>.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="code-formatting">
+<h3>Code formatting<a class="headerlink" href="#code-formatting" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Follow the style you see used in the primary repository</strong></p></li>
+<li><p>For indentation, <em>cPMML</em> follows a slightly modified version of
+<a class="reference external" href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a>
+<strong>The utility script `format.sh &lt;format.sh&gt;`_ has been included to help you enforce the requested style</strong>.</p></li>
+</ul>
+</div>
+<div class="section" id="code-quality">
+<h3>Code quality<a class="headerlink" href="#code-quality" title="Permalink to this headline">¶</a></h3>
+<p>In order to ensure contributions do not impact the code quality of the primary repository, changes must not introduce
+any new error for:</p>
+<ul class="simple">
+<li><p><strong>Static analysis</strong>. The checks can be performed through the <strong>utility script</strong> <a class="reference external" href="runcppcheck.sh">run_cppcheck.sh</a>.</p></li>
+<li><p><strong>Memory errors detection</strong>. The checks can be performed through the <strong>utility script</strong> <a class="reference external" href="runvalgrind.sh">run_valgrind.sh</a>.</p></li>
+</ul>
+</div>
+<div class="section" id="multithreading">
+<h3>Multithreading<a class="headerlink" href="#multithreading" title="Permalink to this headline">¶</a></h3>
+<p><em>cPMML</em> provides parallel execution for scoring of ensemble models (eg. Random Forest Model, Gradient Boosted Trees, etc.).</p>
+<p>Even though multithreaded parallelization is included by default, it must always be considered as an option for the scoring.
+In other words, when contributing to <em>cPMML</em>, sequential execution must be provided before implementing an optimized version using
+multithreaded parallelization.</p>
+</div>
+<div class="section" id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
+<p>Patches without documentation will be returned to sender.  By
+“documentation” we mean  with:</p>
+<ul class="simple">
+<li><p><strong>Text file</strong> with technical details about the changes made (input parameters, exceptions, etc.).</p></li>
+<li><p><strong>Text file</strong> with examples of use in case of new features.</p></li>
+<li><p><strong>Doxygen docstrings</strong> with brief description and link to the corresponding PMML element documentation (if present).</p></li>
+</ul>
+<p>Maintainers will then merge your docstrings with the web version of the documentation.</p>
+</div>
+<div class="section" id="tests">
+<h3>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h3>
+<p>Every change should be submitted along with the corresponding tests.</p>
+<p>In particular:</p>
+<ul class="simple">
+<li><p>Every contributor is asked to write <strong>unit tests</strong> for his code. In particular, the contributor is asked to:</p>
+<ul>
+<li><p>Write a new test, verifying it fails.</p></li>
+<li><p>Add his contribution.</p></li>
+<li><p>Check the test now passes.</p></li>
+</ul>
+</li>
+<li><p>In case of new features introducing support for additional PMML elements, the contributor is asked to
+provide:</p>
+<ul>
+<li><p>A <strong>PMML model</strong> containing the given element.</p></li>
+<li><p>A <strong>CSV file</strong> containing the samples and the corresponding ground-truth predictions.</p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt>New contributions should not prevent the success of existing tests.</dt><dd><dl class="simple">
+<dt>A collection of tests is automatically performed on every build to help you quickly check the impact</dt><dd><p>of your contributions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="benchmarks">
+<h3>Benchmarks<a class="headerlink" href="#benchmarks" title="Permalink to this headline">¶</a></h3>
+<p><em>cPMML</em> focuses on high performance, both in terms of memory and scoring time.</p>
+<p>For this reason maintainers may reject your contribution in case it has too big impact on performance.</p>
+<p>A collection of benchmarks is automatically performed at each build to help you quickly check the
+impact of your contributions.</p>
+</div>
+</div>
+<div class="section" id="issues">
+<h2>Issues<a class="headerlink" href="#issues" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="due-diligence">
+<h3>Due diligence<a class="headerlink" href="#due-diligence" title="Permalink to this headline">¶</a></h3>
+<p>Before submitting an issue, please do the following:</p>
+<ul class="simple">
+<li><p>Perform <strong>basic troubleshooting</strong> steps:</p>
+<ul>
+<li><p><strong>Make sure you’re on the latest version.</strong> If you’re not on the most
+recent version, your problem may have been solved already! Upgrading is
+always the best first step.</p></li>
+<li><p><strong>Try older versions.</strong> If you’re already <em>on</em> the latest release, try
+rolling back a few minor versions (e.g. if on 1.7, try 1.5 or 1.6) and
+see if the problem goes away. This will help the devs narrow down when
+the problem first arose in the commit log.</p></li>
+<li><p><strong>Try switching up dependency versions.</strong> If the software in question has
+dependencies (other libraries, etc) try upgrading/downgrading those as
+well.</p></li>
+</ul>
+</li>
+<li><p><strong>Search the project’s issue tracker</strong> to make sure it’s not a known
+issue.</p></li>
+<li><p>If you don’t find a pre-existing issue, consider <strong>checking with *cPMML* repo admins</strong>
+in case the problem is non-issue-related.</p></li>
+</ul>
+</div>
+<div class="section" id="what-to-put-in-your-issue-report">
+<h3>What to put in your issue report<a class="headerlink" href="#what-to-put-in-your-issue-report" title="Permalink to this headline">¶</a></h3>
+<p>Make sure your report gets the attention it deserves: issue reports with missing
+information may be ignored or punted back to you, delaying a fix.  The below
+constitutes a bare minimum; more info is almost always better:</p>
+<ul class="simple">
+<li><p><strong>What version of the compiler are you
+using?</strong> (g++? clang? MinGW?)</p></li>
+<li><p><strong>What operating system are you on?</strong> Windows? (Vista? 7? 32-bit? 64-bit?)
+Mac OS X?  (10.7.4? 10.9.0?) Linux? (Which distro? Which version of that
+distro? 32 or 64 bits?) Again, more detail is better.</p></li>
+<li><p><strong>Which version or versions of the software are you using?</strong> Ideally, you
+followed the advice above and have ruled out (or verified that the problem
+exists in) a few different versions.</p></li>
+<li><p><strong>How can the developers recreate the issue on their end?</strong> If possible,
+include a copy of your code, the command you used to invoke it, and the full
+output of your run (if applicable.)</p>
+<ul>
+<li><p>A common tactic is to pare down your code until a simple (but still
+issue-causing) “base case” remains. Not only can this help you identify
+problems which aren’t real issues, but it means the developer can get to
+fixing the issue faster.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="internals.html" class="btn btn-neutral float-left" title="Internals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019 AMADEUS. All rights reserved.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+<style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+        background: #0a5db5; /* Amadeus blue */
+    }
+    /*!* Sidebar *!*/
+    /*.wy-nav-side {*/
+    /*    background: #ff0000;*/
+    /*}*/
+</style>
+
+
+</body>
+</html>
