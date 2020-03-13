@@ -6,8 +6,8 @@ High-Performance PMML Scoring
 *****************************
 
 .. mdinclude:: ../README.md
-    :start-line: 4
-    :end-line: 28
+    :start-line: 7
+    :end-line: 31
 
 
 .. toctree::

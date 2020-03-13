@@ -1,5 +1,9 @@
 ![cPMML](./docsrc/img/logo.png)
 
+![Travis (.org)](https://img.shields.io/travis/AmadeusITGroup/cPMML?style=flat-square)
+![GitHub](https://img.shields.io/github/license/AmadeusITGroup/cPMML?style=flat-square)
+![](https://img.shields.io/badge/STD-C%2B%2B11-blue?style=flat-square)
+
 # High-Performance PMML Scoring
 
 *cPMML* is C++ library for scoring machine learning models serialized with the Predictive Model Markup Language ([PMML](http://dmg.org/pmml/v4-4/GeneralStructure.html)).
@@ -9,7 +13,7 @@ Currently, the following PMML elements are supported:
 * PMML General structure (preprocessing, data dictionary, etc.)
 * Tree-based models
 * Regression models
-* Ensemble of the previous
+* Ensembles of the previous
 
 ## Getting Started
 
