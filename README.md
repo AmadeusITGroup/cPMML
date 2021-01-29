@@ -34,7 +34,7 @@ std::cout << model.predict(sample); // "Iris-versicolor"
 ## Set-up 
 #### Linux / Mac
 ```
-git clone https://rndwww.nce.amadeus.net/git/scm/~piannino/cpmml.git && cd cpmml && ./install.sh
+git clone https://github.com/AmadeusITGroup/cPMML.git && cd cPMML && ./install.sh
 ```
 ##### Prerequisites
 * Git
@@ -44,7 +44,7 @@ git clone https://rndwww.nce.amadeus.net/git/scm/~piannino/cpmml.git && cd cpmml
 
 #### Windows
 ```
-git clone https://rndwww.nce.amadeus.net/git/scm/~piannino/cpmml.git && cd cpmml && install.bat
+git clone https://github.com/AmadeusITGroup/cPMML.git && cd cPMML && install.bat
 ```
 ##### Prerequisites
 * Git

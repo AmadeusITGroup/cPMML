@@ -8,7 +8,7 @@ Linux / Mac
 
 .. code-block:: bash
 
-    git clone https://rndwww.nce.amadeus.net/git/scm/~piannino/cpmml.git && cd cpmml && ./install.sh
+    git clone https://github.com/AmadeusITGroup/cPMML.git && cd cPMML && ./install.sh
 
 **Usage**
 
@@ -40,7 +40,7 @@ Windows
 
 .. code-block:: bat
 
-    git clone https://rndwww.nce.amadeus.net/git/scm/~piannino/cpmml.git && cd cpmml && install.bat
+    git clone https://github.com/AmadeusITGroup/cPMML.git && cd cPMML && install.bat
 
 The compiled library files will be placed under cpmml/cpmml_win
 
