@@ -115,6 +115,8 @@ class Predicate {
         return XOR(other);
       case PredicateOpType::PredicateOpTypeValue::SURROGATE:
         return SURROGATE(other);
+      case PredicateOpType::PredicateOpTypeValue::IS_MISSING:
+        return false;
     }
 
     return false;
