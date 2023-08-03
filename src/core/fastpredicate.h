@@ -117,6 +117,8 @@ inline std::function<bool(const Sample &)> to_function(const Predicate &predicat
       return std::bind(_xor, std::placeholders::_1, to_function(predicate.predicates));
     case PredicateOpType::PredicateOpTypeValue::SURROGATE:
       return std::bind(surrogate, std::placeholders::_1, to_function(predicate.predicates));
+    case PredicateOpType::PredicateOpTypeValue::IS_MISSING:
+      return std::bind(_false, std::placeholders::_1);
   }
 
   return std::bind(_false, std::placeholders::_1);

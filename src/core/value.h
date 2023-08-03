@@ -136,24 +136,25 @@ class Value {
   }
 
   inline static double to_double(const std::string &value, const DataType &datatype) {
-    switch (datatype.value) {
-      case DataType::DataTypeValue::BOOLEAN:
-        if (to_lower(value) == "true" || value == "1") return 1;  // only case in which tolower is needed on value
-        return 0;
-      case DataType::DataTypeValue::FLOAT:
-        return ::to_double(value);
-      case DataType::DataTypeValue::INTEGER:
-        return ::to_double(value);
-      case DataType::DataTypeValue::DOUBLE:
-        return ::to_double(value);
-      case DataType::DataTypeValue::STRING:
+    if (value != "null") {
+      switch (datatype.value) {
+        case DataType::DataTypeValue::BOOLEAN:
+          if (to_lower(value) == "true" || value == "1") return 1;  // only case in which tolower is needed on value
+          return 0;
+        case DataType::DataTypeValue::FLOAT:
+          return ::to_double(value);
+        case DataType::DataTypeValue::INTEGER:
+          return ::to_double(value);
+        case DataType::DataTypeValue::DOUBLE:
+          return ::to_double(value);
+        case DataType::DataTypeValue::STRING:
 #ifdef STRING_OPTIMIZATION
-        return static_cast<double>(std::hash<std::string>()(value));
+          return static_cast<double>(std::hash<std::string>()(value));
 #else
-        if (string_converter.find(value) == string_converter.cend()) string_converter[value] = string_index++;
-        return string_converter[value];
-
+          if (string_converter.find(value) == string_converter.cend()) string_converter[value] = string_index++;
+          return string_converter[value];
 #endif
+      }
     }
 
     return std::numeric_limits<double>::min();
